@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System.IO;
 
 namespace DashService
 {
@@ -6,7 +9,23 @@ namespace DashService
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Console Application");
+            CreateHostBuilder(args).Build().Run();
+        }
+
+        private static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
+                .UseWindowsService()
+                .UseSystemd()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .ConfigureServices((hostBuilderContext, services) =>
+                {
+                    services.AddHostedService<Worker>();
+                })
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
         }
     }
 }

@@ -1,16 +1,16 @@
-﻿using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Threading;
+﻿using System;
 using System.Threading.Tasks;
+using System.Threading;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
-namespace DashService
+namespace DashService.Worker
 {
-    internal class Worker : BackgroundService
+    public class WorkerStartup : BackgroundService
     {
-        private readonly ILogger<Worker> _logger;
+        private readonly ILogger<WorkerStartup> _logger;
 
-        public Worker(ILogger<Worker> logger)
+        public WorkerStartup(ILogger<WorkerStartup> logger)
         {
             _logger = logger;
         }

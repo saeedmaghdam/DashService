@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DashService", "DashService\DashService.csproj", "{54C096CF-DD8A-4FF8-8A84-8519A2E6D742}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DashService.WebApi", "DashService.WebApi\DashService.WebApi.csproj", "{650C8277-D4CD-41C6-BA8D-B617F6B26E3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DashService.WebApi", "DashService.WebApi\DashService.WebApi.csproj", "{650C8277-D4CD-41C6-BA8D-B617F6B26E3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DashService.Worker", "DashService.Worker\DashService.Worker.csproj", "{E938ED71-2E79-4692-A629-0E5DB9F8746F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{650C8277-D4CD-41C6-BA8D-B617F6B26E3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{650C8277-D4CD-41C6-BA8D-B617F6B26E3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{650C8277-D4CD-41C6-BA8D-B617F6B26E3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E938ED71-2E79-4692-A629-0E5DB9F8746F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E938ED71-2E79-4692-A629-0E5DB9F8746F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E938ED71-2E79-4692-A629-0E5DB9F8746F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E938ED71-2E79-4692-A629-0E5DB9F8746F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

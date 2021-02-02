@@ -20,11 +20,11 @@ namespace DashService
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .ConfigureServices((hostBuilderContext, services) =>
                 {
-                    services.AddHostedService<Worker>();
+                    services.AddHostedService<Worker.WorkerStartup>();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStartup<WebApi.HostStartup>();
                 });
         }
     }

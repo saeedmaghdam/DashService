@@ -6,11 +6,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Reflection;
 
-namespace DashService
+namespace DashService.WebApi
 {
-    internal class Startup
+    public class HostStartup
     {
-        public Startup(IConfiguration configuration)
+        public HostStartup(IConfiguration configuration)
         {
             Configuration = configuration;
         }

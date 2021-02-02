@@ -8,4 +8,10 @@
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.8" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="DashService.Logger">
+      <HintPath>..\..\..\..\..\DashService.Job\Projects\Application\Libs\DashService.Logger.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DashService", "DashService\DashService.csproj", "{54C096CF-DD8A-4FF8-8A84-8519A2E6D742}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DashService.WebApi", "DashService.WebApi\DashService.WebApi.csproj", "{650C8277-D4CD-41C6-BA8D-B617F6B26E3E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DashService.Worker", "DashService.Worker\DashService.Worker.csproj", "{E938ED71-2E79-4692-A629-0E5DB9F8746F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DashService.Worker", "DashService.Worker\DashService.Worker.csproj", "{E938ED71-2E79-4692-A629-0E5DB9F8746F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DashService.Runtime", "DashService.Runtime\DashService.Runtime.csproj", "{7EC2DB57-4791-46F5-90C8-798579C28A85}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{54C096CF-DD8A-4FF8-8A84-8519A2E6D742}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{54C096CF-DD8A-4FF8-8A84-8519A2E6D742}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{54C096CF-DD8A-4FF8-8A84-8519A2E6D742}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{54C096CF-DD8A-4FF8-8A84-8519A2E6D742}.Release|Any CPU.Build.0 = Release|Any CPU
 		{650C8277-D4CD-41C6-BA8D-B617F6B26E3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{650C8277-D4CD-41C6-BA8D-B617F6B26E3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{650C8277-D4CD-41C6-BA8D-B617F6B26E3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,6 +23,10 @@ Global
 		{E938ED71-2E79-4692-A629-0E5DB9F8746F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E938ED71-2E79-4692-A629-0E5DB9F8746F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E938ED71-2E79-4692-A629-0E5DB9F8746F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EC2DB57-4791-46F5-90C8-798579C28A85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EC2DB57-4791-46F5-90C8-798579C28A85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EC2DB57-4791-46F5-90C8-798579C28A85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EC2DB57-4791-46F5-90C8-798579C28A85}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

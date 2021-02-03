@@ -4,4 +4,10 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Reference Include="DashService.Job.Abstraction">
+      <HintPath>..\..\Libs\DashService.Job.Abstraction.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

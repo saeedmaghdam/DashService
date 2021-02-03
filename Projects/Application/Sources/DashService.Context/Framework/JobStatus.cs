@@ -1,4 +1,4 @@
-﻿namespace DashService.Worker.Framework
+﻿namespace DashService.Context.Framework
 {
     public enum JobStatus
     {

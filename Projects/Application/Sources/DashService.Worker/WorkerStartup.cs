@@ -6,40 +6,29 @@ using System.Threading;
 using DashService.Job.Abstraction;
 using Microsoft.Extensions.Hosting;
 using DashService.Logger;
-using DashService.Worker.Framework;
+using DashService.Context.Framework;
 
 namespace DashService.Worker
 {
     public class WorkerStartup : IHostedService
     {
         private readonly ILogger _logger;
-        private readonly Dictionary<IJob, JobDetails> _jobs;
 
         public WorkerStartup(ILogger logger, IEnumerable<IJob> jobs)
         {
             _logger = logger;
-
-            _jobs = new Dictionary<IJob, JobDetails>();
-            foreach (var job in jobs)
-            {
-                _jobs.Add(job, new JobDetails()
-                {
-                    StartCancellationTokenSource = new CancellationTokenSource(),
-                    StopCancellationTokenSource = new CancellationTokenSource(),
-                    JobStatus = JobStatus.Stopped
-                });
-            }
+            Context.JobContainer.Add(jobs);
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.Information($"DashService was starting the micro services at: {DateTimeOffset.Now}");
 
-            foreach (var job in _jobs)
+            foreach (var jobStructure in Context.JobContainer.Jobs.ToList())
             {
-                var jobCancellationTokenSource = job.Value.StartCancellationTokenSource;
-                Task.Run(() => { job.Key.StartAsync(jobCancellationTokenSource.Token); }, jobCancellationTokenSource.Token);
-                job.Value.JobStatus = JobStatus.Running;
+                var jobCancellationTokenSource = jobStructure.StartCancellationTokenSource;
+                Task.Run(() => { jobStructure.JobInstance.StartAsync(jobCancellationTokenSource.Token); }, jobCancellationTokenSource.Token);
+                jobStructure.JobStatus = JobStatus.Running;
             }
 
             _logger.Information($"DashService started at: {DateTimeOffset.Now}");
@@ -65,12 +54,12 @@ namespace DashService.Worker
             _logger.Information($"DashService was stopping the micro services at: {DateTimeOffset.Now}");
 
             var tasks = new List<Task>();
-            foreach (var job in _jobs.ToList())
+            foreach (var job in Context.JobContainer.Jobs.ToList())
             {
-                job.Value.StartCancellationTokenSource.Cancel();
-                var jobCancellationTokenSource = job.Value.StopCancellationTokenSource;
-                tasks.Add(Task.Run(() => { job.Key.StopAsync(jobCancellationTokenSource.Token); }, jobCancellationTokenSource.Token));
-                job.Value.JobStatus = JobStatus.Stopped;
+                job.StartCancellationTokenSource.Cancel();
+                var jobCancellationTokenSource = job.StopCancellationTokenSource;
+                tasks.Add(Task.Run(() => { job.JobInstance.StopAsync(jobCancellationTokenSource.Token); }, jobCancellationTokenSource.Token));
+                job.JobStatus = JobStatus.Stopped;
             }
 
             Task.WaitAll(tasks.ToArray());

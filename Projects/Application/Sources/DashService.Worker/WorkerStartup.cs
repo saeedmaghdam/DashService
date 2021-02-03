@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using DashService.Job.Abstraction;
@@ -7,7 +9,7 @@ using DashService.Logger;
 
 namespace DashService.Worker
 {
-    public class WorkerStartup : BackgroundService
+    public class WorkerStartup : IHostedService
     {
         private readonly ILogger _logger;
         private readonly IEnumerable<IJob> _jobs;
@@ -18,28 +20,28 @@ namespace DashService.Worker
             _jobs = jobs;
         }
 
-        public override async Task StartAsync(CancellationToken cancellationToken)
+        public Task StartAsync(CancellationToken cancellationToken)
         {
+            _logger.Information($"DashService was starting the micro services at: {DateTimeOffset.Now}");
+
+            foreach (var job in _jobs.ToList())
+                Task.Run(() => { job.StartAsync(cancellationToken); }, cancellationToken);
+
             _logger.Information($"DashService started at: {DateTimeOffset.Now}");
+
+            return Task.CompletedTask;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        public Task StopAsync(CancellationToken cancellationToken)
         {
-            await Task.Run(() =>
-            {
-                do
-                {
-                    if (stoppingToken.IsCancellationRequested)
-                        break;
-                } while (true);
-            });
-        }
+            _logger.Information($"DashService was stopping the micro services at: {DateTimeOffset.Now}");
 
-        public override async Task StopAsync(CancellationToken cancellationToken)
-        {
+            foreach (var job in _jobs.ToList())
+                Task.Run(() => { job.StopAsync(cancellationToken); }, cancellationToken);
+
             _logger.Information($"DashService stopped at: {DateTimeOffset.Now}");
 
-            await Task.CompletedTask;
+            return Task.CompletedTask;
         }
     }
 }

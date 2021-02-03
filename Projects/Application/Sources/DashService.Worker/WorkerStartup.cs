@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Threading;
+using DashService.Job.Abstraction;
 using Microsoft.Extensions.Hosting;
 using DashService.Logger;
 
@@ -9,10 +10,12 @@ namespace DashService.Worker
     public class WorkerStartup : BackgroundService
     {
         private readonly ILogger _logger;
+        private readonly IEnumerable<IJob> _jobs;
 
-        public WorkerStartup(ILogger logger)
+        public WorkerStartup(ILogger logger, IEnumerable<IJob> jobs)
         {
             _logger = logger;
+            _jobs = jobs;
         }
 
         public override async Task StartAsync(CancellationToken cancellationToken)

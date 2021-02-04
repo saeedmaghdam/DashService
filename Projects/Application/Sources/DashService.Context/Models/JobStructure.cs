@@ -1,6 +1,7 @@
 ﻿using DashService.Context.Framework;
 using DashService.Job.Abstraction;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace DashService.Context.Models
 {
@@ -25,6 +26,18 @@ namespace DashService.Context.Models
         }
 
         public CancellationTokenSource StopCancellationTokenSource
+        {
+            get;
+            set;
+        }
+
+        public Task JobStartingTask
+        {
+            get;
+            set;
+        }
+
+        public Task JobStoppingTask
         {
             get;
             set;

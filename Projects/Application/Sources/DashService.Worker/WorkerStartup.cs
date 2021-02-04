@@ -33,7 +33,7 @@ namespace DashService.Worker
                     {
                         jobStructure.JobInstance.StartAsync(jobCancellationTokenSource.Token).Wait(jobCancellationTokenSource.Token);
                     }
-                    catch (Exception ex) { }
+                    catch (Exception) { }
                 }, jobCancellationTokenSource.Token);
                 jobStructure.JobStatus = JobStatus.Running;
             }
@@ -49,7 +49,7 @@ namespace DashService.Worker
                 {
                     Task.Delay(60000, cancellationToken).Wait();
                 }
-                catch (Exception ex) { }
+                catch (Exception) { }
             }
             while (true);
 
@@ -70,7 +70,7 @@ namespace DashService.Worker
                     {
                         jobStructure.JobInstance.StopAsync(jobCancellationTokenSource.Token).Wait(jobCancellationTokenSource.Token);
                     }
-                    catch (Exception ex) { }
+                    catch (Exception) { }
                 }, jobCancellationTokenSource.Token);
                 jobStructure.JobStatus = JobStatus.Stopped;
             }

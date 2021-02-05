@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DashService.Worker", "DashS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DashService.Runtime", "DashService.Runtime\DashService.Runtime.csproj", "{7EC2DB57-4791-46F5-90C8-798579C28A85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DashService.Context", "DashService.Context\DashService.Context.csproj", "{860BC00A-E0E1-4409-ADC9-A55E39BAEC08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DashService.Context", "DashService.Context\DashService.Context.csproj", "{860BC00A-E0E1-4409-ADC9-A55E39BAEC08}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

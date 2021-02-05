@@ -35,6 +35,9 @@ namespace DashService.WebApi
                 app.UseHsts();
             }
 
+            WebSocket.Socket.Initialize(app);
+            app.UseFileServer();
+
             app.UseHttpsRedirection();
 
             app.UseRouting();

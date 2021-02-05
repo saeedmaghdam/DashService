@@ -6,7 +6,6 @@ using System.Threading;
 using DashService.Job.Abstraction;
 using Microsoft.Extensions.Hosting;
 using DashService.Logger;
-using DashService.Context.Framework;
 
 namespace DashService.Worker
 {
@@ -35,7 +34,6 @@ namespace DashService.Worker
                     }
                     catch (Exception) { }
                 }, jobCancellationTokenSource.Token);
-                jobStructure.JobStatus = JobStatus.Running;
             }
 
             _logger.Information($"DashService started at: {DateTimeOffset.Now}");
@@ -72,7 +70,6 @@ namespace DashService.Worker
                     }
                     catch (Exception) { }
                 }, jobCancellationTokenSource.Token);
-                jobStructure.JobStatus = JobStatus.Stopped;
             }
 
             Task.WaitAll(Context.JobContainer.Jobs.Select(x=>x.JobStoppingTask).ToArray());

@@ -1,5 +1,4 @@
-﻿using DashService.Context.Framework;
-using DashService.Context.Models;
+﻿using DashService.Context.Models;
 using DashService.Job.Abstraction;
 using System.Collections.Generic;
 using System.Threading;
@@ -18,8 +17,7 @@ namespace DashService.Context
                 {
                     JobInstance = job,
                     StartCancellationTokenSource = new CancellationTokenSource(),
-                    StopCancellationTokenSource = new CancellationTokenSource(),
-                    JobStatus = JobStatus.Stopped
+                    StopCancellationTokenSource = new CancellationTokenSource()
                 });
             }
         }

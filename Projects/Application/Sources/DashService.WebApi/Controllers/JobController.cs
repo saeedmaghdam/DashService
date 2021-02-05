@@ -18,7 +18,7 @@ namespace DashService.WebApi.Controllers
                     Namespace = job.JobInstance.GetType().Namespace,
                     Name = job.JobInstance.Name,
                     Description = job.JobInstance.Description,
-                    JobStatus = job.JobStatus,
+                    JobStatus = job.JobStartingTask.Status.ToString(),
                     Version = job.JobInstance.Version,
                     ViewId = job.JobInstance.GetType().GUID
                 })))

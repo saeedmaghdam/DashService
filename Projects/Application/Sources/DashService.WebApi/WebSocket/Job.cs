@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using DashService.Context.Models;
 
 namespace DashService.WebApi.WebSocket
 {
@@ -9,42 +10,44 @@ namespace DashService.WebApi.WebSocket
     {
         public static async Task Start(Guid jobViewId)
         {
-            var job = Context.JobContainer.Jobs.Where(x => x.JobInstance.GetType().GUID == jobViewId).SingleOrDefault();
+            var jobStructure = Context.JobContainer.Jobs.Where(x => x.JobInstance.GetType().GUID == jobViewId).SingleOrDefault();
 
-            if (job.JobStartingTask.Status != TaskStatus.Running)
+            if (jobStructure.JobStatus != JobStatus.Running)
             {
-                job.StartCancellationTokenSource = new CancellationTokenSource();
-                job.StopCancellationTokenSource = new CancellationTokenSource();
-                job.JobStartingTask = Task.Run(() => { job.JobInstance.StartAsync(job.StartCancellationTokenSource.Token); }, CancellationToken.None);
+                jobStructure.StartCancellationTokenSource = new CancellationTokenSource();
+                jobStructure.StopCancellationTokenSource = new CancellationTokenSource();
+                jobStructure.JobStartingTask = Task.Run(() => { jobStructure.JobInstance.StartAsync(jobStructure.StartCancellationTokenSource.Token); }, CancellationToken.None);
                 Socket.CallClientMethod(@"
 {
     ""command"": ""change_status"",
     ""data"": {
-        ""view_id"": """ + job.JobInstance.GetType().GUID + @""",
+        ""view_id"": """ + jobStructure.JobInstance.GetType().GUID + @""",
         ""status"": """ + TaskStatus.Running.ToString() + @"""
     }
 }
 ");
+                jobStructure.JobStatus = JobStatus.Running;
             }
         }
 
         public static async Task Stop(Guid jobViewId)
         {
-            var job = Context.JobContainer.Jobs.Where(x => x.JobInstance.GetType().GUID == jobViewId).SingleOrDefault();
+            var jobStructure = Context.JobContainer.Jobs.Where(x => x.JobInstance.GetType().GUID == jobViewId).SingleOrDefault();
 
-            if (job.JobStartingTask.Status == TaskStatus.Running || job.JobStartingTask.Status == TaskStatus.WaitingForActivation || job.JobStartingTask.Status == TaskStatus.WaitingForChildrenToComplete || job.JobStartingTask.Status == TaskStatus.WaitingToRun)
+            if (jobStructure.JobStatus == JobStatus.Running || jobStructure.JobStatus == JobStatus.Paused)
             {
-                job.StartCancellationTokenSource.Cancel();
-                job.JobStoppingTask = Task.Run(() => { job.JobInstance.StopAsync(job.StopCancellationTokenSource.Token); }, CancellationToken.None);
+                jobStructure.StartCancellationTokenSource.Cancel();
+                jobStructure.JobStoppingTask = Task.Run(() => { jobStructure.JobInstance.StopAsync(jobStructure.StopCancellationTokenSource.Token); }, CancellationToken.None);
                 Socket.CallClientMethod(@"
 {
     ""command"": ""change_status"",
     ""data"": {
-        ""view_id"": """ + job.JobInstance.GetType().GUID + @""",
+        ""view_id"": """ + jobStructure.JobInstance.GetType().GUID + @""",
         ""status"": """ + TaskStatus.Canceled.ToString() + @"""
     }
 }
 ");
+                jobStructure.JobStatus = JobStatus.Stopped;
             }
         }
     }

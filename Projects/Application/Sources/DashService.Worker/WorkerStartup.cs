@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
+using DashService.Context.Models;
 using DashService.Job.Abstraction;
 using Microsoft.Extensions.Hosting;
 using DashService.Logger;
@@ -27,6 +28,7 @@ namespace DashService.Worker
             {
                 var jobCancellationTokenSource = jobStructure.StartCancellationTokenSource;
                 jobStructure.JobStartingTask = Task.Run(() => { jobStructure.JobInstance.StartAsync(jobStructure.StartCancellationTokenSource.Token); }, CancellationToken.None);
+                jobStructure.JobStatus = JobStatus.Running;
             }
 
             _logger.Information($"DashService started at: {DateTimeOffset.Now}");
@@ -51,9 +53,12 @@ namespace DashService.Worker
 
             foreach (var jobStructure in Context.JobContainer.Jobs.ToList())
             {
-                jobStructure.StartCancellationTokenSource.Cancel();
-                var jobCancellationTokenSource = jobStructure.StopCancellationTokenSource;
-                jobStructure.JobStoppingTask = Task.Run(() => { jobStructure.JobInstance.StopAsync(jobStructure.StopCancellationTokenSource.Token); }, CancellationToken.None);
+                if (jobStructure.JobStatus == JobStatus.Running || jobStructure.JobStatus == JobStatus.Paused)
+                {
+                    jobStructure.StartCancellationTokenSource.Cancel();
+                    var jobCancellationTokenSource = jobStructure.StopCancellationTokenSource;
+                    jobStructure.JobStoppingTask = Task.Run(() => { jobStructure.JobInstance.StopAsync(jobStructure.StopCancellationTokenSource.Token); }, CancellationToken.None);
+                }
             }
 
             Task.WaitAll(Context.JobContainer.Jobs.Select(x => x.JobStoppingTask).ToArray());

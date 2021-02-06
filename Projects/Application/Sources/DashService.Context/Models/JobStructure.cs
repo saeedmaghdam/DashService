@@ -35,5 +35,20 @@ namespace DashService.Context.Models
             get;
             set;
         }
+
+        public JobStatus JobStatus
+        {
+            get;
+            set;
+        }
     }
+
+    public enum JobStatus
+    {
+        None = 0,
+        Stopped = 1,
+        Running = 2,
+        Paused = 3
+    }
+
 }

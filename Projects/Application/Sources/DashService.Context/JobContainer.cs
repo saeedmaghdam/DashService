@@ -17,7 +17,8 @@ namespace DashService.Context
                 {
                     JobInstance = job,
                     StartCancellationTokenSource = new CancellationTokenSource(),
-                    StopCancellationTokenSource = new CancellationTokenSource()
+                    StopCancellationTokenSource = new CancellationTokenSource(),
+                    JobStatus = JobStatus.None
                 });
             }
         }

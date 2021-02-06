@@ -10,15 +10,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DashService.Context\DashService.Context.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="DashService.Job.Abstraction">
-      <HintPath>..\..\Libs\DashService.Job.Abstraction.dll</HintPath>
-    </Reference>
-    <Reference Include="DashService.Logger">
-      <HintPath>..\..\..\..\..\DashService.Job\Projects\Application\Libs\DashService.Logger.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\DashService.Job.Abstraction\DashService.Job.Abstraction.csproj" />
+    <ProjectReference Include="..\DashService.Logger\DashService.Logger.csproj" />
   </ItemGroup>
 
 </Project>

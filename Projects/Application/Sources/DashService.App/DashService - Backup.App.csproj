@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.1.0" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
+    <PackageReference Include="Microsoft.AspNet.WebApi" Version="5.2.7" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.8" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="5.0.1" />
+    <PackageReference Include="Serilog" Version="2.10.0" />
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DashService.Job.Abstraction\DashService.Job.Abstraction.csproj" />
+    <ProjectReference Include="..\DashService.Logger\DashService.Logger.csproj" />
+    <ProjectReference Include="..\DashService.WebApi\DashService.WebApi.csproj" />
+    <ProjectReference Include="..\DashService.Worker\DashService.Worker.csproj" />
+  </ItemGroup>
+
+</Project>

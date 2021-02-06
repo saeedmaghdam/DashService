@@ -7,12 +7,9 @@ namespace DashService.WebApi.WebSocket
 {
     public static class Job
     {
-        public static Task Start(Guid jobViewId)
+        public static async Task Start(Guid jobViewId)
         {
             var job = Context.JobContainer.Jobs.Where(x => x.JobInstance.GetType().GUID == jobViewId).SingleOrDefault();
-
-            if (job == null)
-                return Task.CompletedTask;
 
             if (job.JobStartingTask.Status != TaskStatus.Running)
             {
@@ -29,16 +26,11 @@ namespace DashService.WebApi.WebSocket
 }
 ");
             }
-
-            return Task.CompletedTask;
         }
 
-        public static Task Stop(Guid jobViewId)
+        public static async Task Stop(Guid jobViewId)
         {
             var job = Context.JobContainer.Jobs.Where(x => x.JobInstance.GetType().GUID == jobViewId).SingleOrDefault();
-
-            if (job == null)
-                return Task.CompletedTask;
 
             if (job.JobStartingTask.Status == TaskStatus.Running || job.JobStartingTask.Status == TaskStatus.WaitingForActivation || job.JobStartingTask.Status == TaskStatus.WaitingForChildrenToComplete || job.JobStartingTask.Status == TaskStatus.WaitingToRun)
             {
@@ -54,8 +46,6 @@ namespace DashService.WebApi.WebSocket
 }
 ");
             }
-
-            return Task.CompletedTask;
         }
     }
 }

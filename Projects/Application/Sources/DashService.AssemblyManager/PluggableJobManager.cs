@@ -61,7 +61,7 @@ namespace DashService.JobHandler
             var containerBuilder = new ContainerBuilder();
             MethodInfo methodInfo = jobType.GetMethod("Register");
             if (methodInfo == null)
-                throw new Exception();
+                return null;
 
             methodInfo.Invoke(null, new object[] { containerBuilder });
             var container = containerBuilder.Build();

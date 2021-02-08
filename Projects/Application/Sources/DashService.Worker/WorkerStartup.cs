@@ -19,7 +19,7 @@ namespace DashService.Worker
             _logger = logger;
 
             var pluginsPath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "Jobs");
-            PluginableJobManager.LoadDirectory(pluginsPath);
+            PluggableJobManager.LoadDirectory(pluginsPath);
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)

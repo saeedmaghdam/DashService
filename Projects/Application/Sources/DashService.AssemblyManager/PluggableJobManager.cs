@@ -11,7 +11,7 @@ using DashService.Job.Abstraction;
 
 namespace DashService.JobHandler
 {
-    public static class PluginableJobManager
+    public static class PluggableJobManager
     {
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static PluginableJobModel Load(string jobsPath)
@@ -77,7 +77,7 @@ namespace DashService.JobHandler
         public static void LoadDirectory(string pluginsPath)
         {
             foreach (var directory in Directory.GetDirectories(pluginsPath))
-                PluginableJobManager.Load(directory);
+                PluggableJobManager.Load(directory);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]

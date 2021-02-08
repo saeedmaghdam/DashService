@@ -10,7 +10,7 @@ namespace DashService.WebApi.WebSocket
     {
         public static async Task Start(Guid jobViewId)
         {
-            var jobStructure = Context.JobContainer.PluginableJobs.Where(x => x.JobInstance.GetType().GUID == jobViewId).SingleOrDefault();
+            var jobStructure = Context.JobContainer.PluginableJobs.Where(x => x.PluggedinAssembly.UniqueId == jobViewId).SingleOrDefault();
 
             if (jobStructure.JobStatus != JobStatus.Running)
             {
@@ -21,7 +21,7 @@ namespace DashService.WebApi.WebSocket
 {
     ""command"": ""change_status"",
     ""data"": {
-        ""view_id"": """ + jobStructure.JobInstance.GetType().GUID + @""",
+        ""view_id"": """ + jobStructure.PluggedinAssembly.UniqueId + @""",
         ""status"": """ + TaskStatus.Running.ToString() + @"""
     }
 }
@@ -32,7 +32,7 @@ namespace DashService.WebApi.WebSocket
 
         public static async Task Stop(Guid jobViewId)
         {
-            var jobStructure = Context.JobContainer.PluginableJobs.Where(x => x.JobInstance.GetType().GUID == jobViewId).SingleOrDefault();
+            var jobStructure = Context.JobContainer.PluginableJobs.Where(x => x.PluggedinAssembly.UniqueId == jobViewId).SingleOrDefault();
 
             if (jobStructure.JobStatus == JobStatus.Running || jobStructure.JobStatus == JobStatus.Paused)
             {
@@ -42,7 +42,7 @@ namespace DashService.WebApi.WebSocket
 {
     ""command"": ""change_status"",
     ""data"": {
-        ""view_id"": """ + jobStructure.JobInstance.GetType().GUID + @""",
+        ""view_id"": """ + jobStructure.PluggedinAssembly.UniqueId + @""",
         ""status"": """ + TaskStatus.Canceled.ToString() + @"""
     }
 }

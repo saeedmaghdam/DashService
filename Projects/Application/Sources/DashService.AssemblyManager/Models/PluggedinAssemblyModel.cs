@@ -6,6 +6,12 @@ namespace DashService.JobHandler.Models
 {
     public class PluggedinAssemblyModel : IPluggedinAssemblyModel
     {
+        public Guid UniqueId
+        {
+            get;
+            set;
+        }
+
         public Assembly Assembly
         {
             get;

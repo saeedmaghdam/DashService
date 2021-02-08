@@ -69,6 +69,7 @@ namespace DashService.JobHandler
 
             var pluggedinAssembly = new PluggedinAssemblyModel()
             {
+                UniqueId = Guid.NewGuid(),
                 Assembly = assembly,
                 HostAssemblyLoadContext = alc,
                 WeakReference = alcWeakRef,

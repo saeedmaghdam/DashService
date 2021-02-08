@@ -20,7 +20,7 @@ namespace DashService.WebApi.Controllers
                     Description = job.JobInstance.Description,
                     JobStatus = job.JobStartingTask.Status.ToString(),
                     Version = job.JobInstance.Version,
-                    ViewId = job.JobInstance.GetType().GUID
+                    ViewId = job.PluggedinAssembly.UniqueId
                 })))
             );
         }

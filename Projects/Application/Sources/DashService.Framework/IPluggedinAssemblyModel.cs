@@ -5,6 +5,12 @@ namespace DashService.Framework
 {
     public interface IPluggedinAssemblyModel
     {
+        Guid UniqueId
+        {
+            get;
+            set;
+        }
+
         Assembly Assembly
         {
             get;

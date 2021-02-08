@@ -76,6 +76,9 @@ namespace DashService.JobHandler
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void LoadDirectory(string pluginsPath)
         {
+            if (!Directory.Exists(pluginsPath))
+                throw new Exception("Jobs folder does not exists in bin directory");
+
             foreach (var directory in Directory.GetDirectories(pluginsPath))
                 PluggableJobManager.Load(directory);
         }

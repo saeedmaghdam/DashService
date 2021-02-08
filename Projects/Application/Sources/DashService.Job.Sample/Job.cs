@@ -20,14 +20,14 @@ namespace DashService.Job.Sample
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.Information("Hello, I'm the sample job!");
+            _logger.Information("Hello, I'm the sample job 1!");
 
             do
             {
                 if (cancellationToken.IsCancellationRequested)
                     break;
 
-                _logger.Information("I'm sample job, I'm doing a process ...");
+                _logger.Information("I'm sample job 1, I'm doing a process ...");
 
                 Task.Delay(3000, cancellationToken).Wait(cancellationToken);
             }
@@ -38,7 +38,7 @@ namespace DashService.Job.Sample
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.Information("I'm sample job! I've finished my task, thank you.");
+            _logger.Information("I'm sample job 1! I've finished my task, thank you.");
 
             return Task.CompletedTask;
         }

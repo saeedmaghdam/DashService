@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using DashService.Context.Models;
+using DashService.Framework;
 
 namespace DashService.WebApi.WebSocket
 {
@@ -10,7 +10,7 @@ namespace DashService.WebApi.WebSocket
     {
         public static async Task Start(Guid jobViewId)
         {
-            var jobStructure = Context.JobContainer.Jobs.Where(x => x.JobInstance.GetType().GUID == jobViewId).SingleOrDefault();
+            var jobStructure = Context.JobContainer.PluginableJobs.Where(x => x.JobInstance.GetType().GUID == jobViewId).SingleOrDefault();
 
             if (jobStructure.JobStatus != JobStatus.Running)
             {
@@ -32,7 +32,7 @@ namespace DashService.WebApi.WebSocket
 
         public static async Task Stop(Guid jobViewId)
         {
-            var jobStructure = Context.JobContainer.Jobs.Where(x => x.JobInstance.GetType().GUID == jobViewId).SingleOrDefault();
+            var jobStructure = Context.JobContainer.PluginableJobs.Where(x => x.JobInstance.GetType().GUID == jobViewId).SingleOrDefault();
 
             if (jobStructure.JobStatus == JobStatus.Running || jobStructure.JobStatus == JobStatus.Paused)
             {

@@ -10,7 +10,7 @@ namespace DashService.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var jobs = Context.JobContainer.Jobs;
+            var jobs = Context.JobContainer.PluginableJobs;
 
             return await Task.FromResult(
                 Ok(new ApiResult<IEnumerable<dynamic>>(jobs.Select(job => new {

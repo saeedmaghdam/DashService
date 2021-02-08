@@ -1,28 +1,25 @@
-﻿using DashService.Context.Models;
-using DashService.Job.Abstraction;
-using System.Collections.Generic;
-using System.Threading;
+﻿using System.Collections.Generic;
+using DashService.Framework;
 
 namespace DashService.Context
 {
     public static class JobContainer
     {
-        private static List<JobStructure> _jobs = new List<JobStructure>();
-        
-        public static void Add(IEnumerable<IJob> jobs)
+        private static List<IPluginableJobModel> _pluginableJobs = new List<IPluginableJobModel>();
+
+        public static void Register(IEnumerable<IPluginableJobModel> pluginableJobs)
         {
-            foreach (var job in jobs)
+            foreach (var pluginableJob in pluginableJobs)
             {
-                _jobs.Add(new JobStructure()
-                {
-                    JobInstance = job,
-                    StartCancellationTokenSource = new CancellationTokenSource(),
-                    StopCancellationTokenSource = new CancellationTokenSource(),
-                    JobStatus = JobStatus.None
-                });
+                Register(pluginableJob);
             }
         }
 
-        public static IEnumerable<JobStructure> Jobs => _jobs;
+        public static void Register(IPluginableJobModel pluginableJob)
+        {
+            _pluginableJobs.Add(pluginableJob);
+        }
+
+        public static IEnumerable<IPluginableJobModel> PluginableJobs => _pluginableJobs;
     }
 }

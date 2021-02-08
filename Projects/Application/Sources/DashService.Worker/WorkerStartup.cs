@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
-using DashService.Context.Models;
-using DashService.Job.Abstraction;
+using DashService.Framework;
+using DashService.JobHandler;
 using Microsoft.Extensions.Hosting;
 using DashService.Logger;
 
@@ -14,20 +14,22 @@ namespace DashService.Worker
     {
         private readonly ILogger _logger;
 
-        public WorkerStartup(ILogger logger, IEnumerable<IJob> jobs)
+        public WorkerStartup(ILogger logger)
         {
             _logger = logger;
-            Context.JobContainer.Add(jobs);
+
+            var pluginsPath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "Jobs");
+            PluginableJobManager.LoadDirectory(pluginsPath);
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.Information($"DashService was starting the micro services at: {DateTimeOffset.Now}");
 
-            foreach (var jobStructure in Context.JobContainer.Jobs.ToList())
+            foreach (var jobStructure in Context.JobContainer.PluginableJobs.ToList())
             {
                 var jobCancellationTokenSource = jobStructure.StartCancellationTokenSource;
-                jobStructure.JobStartingTask = Task.Run(() => { jobStructure.JobInstance.StartAsync(jobStructure.StartCancellationTokenSource.Token); }, CancellationToken.None);
+                jobStructure.JobStartingTask = Task.Run(() => { jobStructure.JobInstance.StartAsync(jobStructure.StartCancellationTokenSource.Token); }, jobCancellationTokenSource.Token);
                 jobStructure.JobStatus = JobStatus.Running;
             }
 
@@ -51,7 +53,7 @@ namespace DashService.Worker
         {
             _logger.Information($"DashService was stopping the micro services at: {DateTimeOffset.Now}");
 
-            foreach (var jobStructure in Context.JobContainer.Jobs.ToList())
+            foreach (var jobStructure in Context.JobContainer.PluginableJobs.ToList())
             {
                 if (jobStructure.JobStatus == JobStatus.Running || jobStructure.JobStatus == JobStatus.Paused)
                 {
@@ -61,7 +63,7 @@ namespace DashService.Worker
                 }
             }
 
-            Task.WaitAll(Context.JobContainer.Jobs.Select(x => x.JobStoppingTask).ToArray());
+            Task.WaitAll(Context.JobContainer.PluginableJobs.Select(x => x.JobStoppingTask).ToArray());
 
             _logger.Information($"DashService stopped at: {DateTimeOffset.Now}");
         }

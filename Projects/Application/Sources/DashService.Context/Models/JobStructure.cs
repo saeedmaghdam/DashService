@@ -1,13 +1,11 @@
-﻿using System;
-using System.Reflection;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using DashService.Framework;
 using DashService.Job.Abstraction;
 
 namespace DashService.Context.Models
 {
-    public class PluginableJobModel : IPluginableJobModel
+    public class JobStructure : IJobStructure
     {
         public IJob JobInstance
         {
@@ -44,31 +42,17 @@ namespace DashService.Context.Models
             get;
             set;
         }
-
-        public Assembly Assembly
+        public IPluggedinAssemblyModel PluggedinAssembly
         {
             get;
             set;
         }
 
-        public HostAssemblyLoadContext HostAssemblyLoadContext
-        {
-            get;
-            set;
-        }
-
-        public WeakReference WeakReference
-        {
-            get;
-            set;
-        }
-
-        public PluginableJobModel(IJob jobInstance, Assembly assembly, HostAssemblyLoadContext hostAssemblyLoadContext, WeakReference weakReference)
+        public JobStructure(IJob jobInstance, IPluggedinAssemblyModel pluggedinAssembly)
         {
             JobInstance = jobInstance;
-            Assembly = assembly;
-            HostAssemblyLoadContext = hostAssemblyLoadContext;
-            WeakReference = weakReference;
+            PluggedinAssembly = pluggedinAssembly;
+
             StartCancellationTokenSource = new CancellationTokenSource();
             StopCancellationTokenSource = new CancellationTokenSource();
             JobStatus = JobStatus.None;

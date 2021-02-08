@@ -1,12 +1,10 @@
-﻿using System;
-using System.Reflection;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using DashService.Job.Abstraction;
 
 namespace DashService.Framework
 {
-    public interface IPluginableJobModel
+    public interface IJobStructure
     {
         IJob JobInstance
         {
@@ -44,19 +42,7 @@ namespace DashService.Framework
             set;
         }
 
-        Assembly Assembly
-        {
-            get;
-            set;
-        }
-
-        HostAssemblyLoadContext HostAssemblyLoadContext
-        {
-            get;
-            set;
-        }
-
-        WeakReference WeakReference
+        IPluggedinAssemblyModel PluggedinAssembly
         {
             get;
             set;

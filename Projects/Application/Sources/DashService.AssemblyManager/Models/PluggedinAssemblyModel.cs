@@ -23,5 +23,11 @@ namespace DashService.JobHandler.Models
             get;
             set;
         }
+
+        public string JobFullPath
+        {
+            get;
+            set;
+        }
     }
 }

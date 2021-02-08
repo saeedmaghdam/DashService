@@ -22,5 +22,11 @@ namespace DashService.Framework
             get;
             set;
         }
+
+        string JobFullPath
+        {
+            get;
+            set;
+        }
     }
 }

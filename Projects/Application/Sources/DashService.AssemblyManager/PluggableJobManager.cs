@@ -71,7 +71,8 @@ namespace DashService.JobHandler
             {
                 Assembly = assembly,
                 HostAssemblyLoadContext = alc,
-                WeakReference = alcWeakRef
+                WeakReference = alcWeakRef,
+                JobFullPath = jobFilePath
             };
 
             var jobStructure = new JobStructure(jobInstance, pluggedinAssembly);

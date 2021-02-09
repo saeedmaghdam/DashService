@@ -20,7 +20,7 @@ namespace DashService.WebApi.WebSocket
             {
                 jobInstance.JobLoadCancellationTokenSource = new CancellationTokenSource();
                 jobInstance.JobUnloadCancellationTokenSource = new CancellationTokenSource();
-                jobInstance.JobStartingTask = jobInstance.StartAsync(CancellationToken.None);
+                jobInstance.JobStartingTask = jobInstance.StartAsync(Context.Common.CancellationToken);
                 Socket.CallClientMethod(@"
 {
     ""command"": ""change_status"",
@@ -44,7 +44,7 @@ namespace DashService.WebApi.WebSocket
             if (jobInstance.JobStatus == JobStatus.Running || jobInstance.JobStatus == JobStatus.Paused)
             {
                 jobInstance.JobLoadCancellationTokenSource.Cancel();
-                jobInstance.JobStoppingTask = jobInstance.StopAsync(CancellationToken.None);
+                jobInstance.JobStoppingTask = jobInstance.StopAsync(Context.Common.CancellationToken);
                 Socket.CallClientMethod(@"
 {
     ""command"": ""change_status"",

@@ -14,12 +14,12 @@ namespace DashService.WebApi.Controllers
 
             return await Task.FromResult(
                 Ok(new ApiResult<IEnumerable<dynamic>>(jobs.Select(job => new {
-                    FullName = job.JobInstance.GetType().FullName,
-                    Namespace = job.JobInstance.GetType().Namespace,
-                    Name = job.JobInstance.Name,
-                    Description = job.JobInstance.Description,
+                    FullName = job.PluggedinAssembly.JobInstance.GetType().FullName,
+                    Namespace = job.PluggedinAssembly.JobInstance.GetType().Namespace,
+                    Name = job.PluggedinAssembly.JobInstance.Name,
+                    Description = job.PluggedinAssembly.JobInstance.Description,
                     JobStatus = job.JobStartingTask.Status.ToString(),
-                    Version = job.JobInstance.Version,
+                    Version = job.PluggedinAssembly.JobInstance.Version,
                     ViewId = job.PluggedinAssembly.UniqueId
                 })))
             );

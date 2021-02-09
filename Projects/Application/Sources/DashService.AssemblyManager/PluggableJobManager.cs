@@ -69,6 +69,7 @@ namespace DashService.JobHandler
 
             var pluggedinAssembly = new PluggedinAssemblyModel()
             {
+                JobInstance = jobInstance,
                 UniqueId = Guid.NewGuid(),
                 Assembly = assembly,
                 HostAssemblyLoadContext = alc,
@@ -76,7 +77,7 @@ namespace DashService.JobHandler
                 JobFullPath = jobFilePath
             };
 
-            var jobStructure = new JobStructure(jobInstance, pluggedinAssembly);
+            var jobStructure = new JobStructure(pluggedinAssembly);
 
             JobContainer.Register(jobStructure);
 

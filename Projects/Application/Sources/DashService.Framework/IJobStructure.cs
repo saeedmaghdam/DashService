@@ -1,17 +1,10 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using DashService.Job.Abstraction;
 
 namespace DashService.Framework
 {
     public interface IJobStructure
     {
-        IJob JobInstance
-        {
-            get;
-            set;
-        }
-
         CancellationTokenSource StartCancellationTokenSource
         {
             get;

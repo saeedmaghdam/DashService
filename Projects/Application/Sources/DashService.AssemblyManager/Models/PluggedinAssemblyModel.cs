@@ -1,11 +1,18 @@
 ﻿using DashService.Framework;
 using System;
 using System.Reflection;
+using DashService.Job.Abstraction;
 
 namespace DashService.JobHandler.Models
 {
     public class PluggedinAssemblyModel : IPluggedinAssemblyModel
     {
+        public IJob JobInstance
+        {
+            get;
+            set;
+        }
+
         public Guid UniqueId
         {
             get;

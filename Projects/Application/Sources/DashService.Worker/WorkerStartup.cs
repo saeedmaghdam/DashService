@@ -29,7 +29,7 @@ namespace DashService.Worker
             foreach (var jobStructure in Context.JobContainer.PluginableJobs.ToList())
             {
                 var jobCancellationTokenSource = jobStructure.StartCancellationTokenSource;
-                jobStructure.JobStartingTask = Task.Run(() => { jobStructure.JobInstance.StartAsync(jobStructure.StartCancellationTokenSource.Token); }, jobCancellationTokenSource.Token);
+                jobStructure.JobStartingTask = Task.Run(() => { jobStructure.PluggedinAssembly.JobInstance.StartAsync(jobStructure.StartCancellationTokenSource.Token); }, jobCancellationTokenSource.Token);
                 jobStructure.JobStatus = JobStatus.Running;
             }
 
@@ -59,7 +59,7 @@ namespace DashService.Worker
                 {
                     jobStructure.StartCancellationTokenSource.Cancel();
                     var jobCancellationTokenSource = jobStructure.StopCancellationTokenSource;
-                    jobStructure.JobStoppingTask = Task.Run(() => { jobStructure.JobInstance.StopAsync(jobStructure.StopCancellationTokenSource.Token); }, CancellationToken.None);
+                    jobStructure.JobStoppingTask = Task.Run(() => { jobStructure.PluggedinAssembly.JobInstance.StopAsync(jobStructure.StopCancellationTokenSource.Token); }, CancellationToken.None);
                 }
             }
 

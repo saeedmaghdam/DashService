@@ -1,18 +1,11 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using DashService.Framework;
-using DashService.Job.Abstraction;
 
 namespace DashService.Context.Models
 {
     public class JobStructure : IJobStructure
     {
-        public IJob JobInstance
-        {
-            get;
-            set;
-        }
-
         public CancellationTokenSource StartCancellationTokenSource
         {
             get;
@@ -48,9 +41,8 @@ namespace DashService.Context.Models
             set;
         }
 
-        public JobStructure(IJob jobInstance, IPluggedinAssemblyModel pluggedinAssembly)
+        public JobStructure(IPluggedinAssemblyModel pluggedinAssembly)
         {
-            JobInstance = jobInstance;
             PluggedinAssembly = pluggedinAssembly;
 
             StartCancellationTokenSource = new CancellationTokenSource();

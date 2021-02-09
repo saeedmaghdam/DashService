@@ -3,6 +3,7 @@ using Autofac.Builder;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using DashService.Framework;
 
 namespace DashService.App
 {
@@ -29,8 +30,10 @@ namespace DashService.App
         /// Initializes a new instance of the <see cref="AutofacServiceProviderFactory"/> class.
         /// </summary>
         /// <param name="configurationAction">Action on a <see cref="ContainerBuilder"/> that adds component registrations to the container..</param>
-        public CustomAutofacServiceProviderFactory(Action<ContainerBuilder> configurationAction = null) =>
+        public CustomAutofacServiceProviderFactory(Action<ContainerBuilder> configurationAction = null)
+        {
             _configurationAction = configurationAction ?? (builder => { });
+        }
 
         /// <summary>
         /// Creates a container builder from an <see cref="IServiceCollection" />.
@@ -57,9 +60,10 @@ namespace DashService.App
         {
             if (containerBuilder == null) throw new ArgumentNullException(nameof(containerBuilder));
 
-            Context.Autofac.Container = containerBuilder.Build(_containerBuildOptions);
+            var container = containerBuilder.Build(_containerBuildOptions);
+            Context.DI.CustomContainer.SetAutofacContainer(container);
 
-            return new AutofacServiceProvider(Context.Autofac.Container);
+            return new AutofacServiceProvider(container);
         }
     }
 }

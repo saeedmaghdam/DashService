@@ -19,11 +19,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DashService.Job.Sample", "D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DashService.Logger", "DashService.Logger\DashService.Logger.csproj", "{1E50EC9B-A8CD-4694-9F2B-ACCC325E6A77}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DashService.Job.Sample2", "DashService.Job.Sample2\DashService.Job.Sample2.csproj", "{579C5A9D-6C96-4F25-889B-9EFCC8B428DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DashService.JobHandler", "DashService.AssemblyManager\DashService.JobHandler.csproj", "{AEE751B5-7B7B-40FC-B723-B110EDE08287}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DashService.JobHandler", "DashService.AssemblyManager\DashService.JobHandler.csproj", "{AEE751B5-7B7B-40FC-B723-B110EDE08287}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DashService.Framework", "DashService.Framework\DashService.Framework.csproj", "{084A538B-80BD-4E52-861D-0C7467A92648}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DashService.Framework", "DashService.Framework\DashService.Framework.csproj", "{084A538B-80BD-4E52-861D-0C7467A92648}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DashService.Context.DI", "DashService.Job.DI\DashService.Context.DI.csproj", "{ED8D70E4-87D4-4EBF-A8F7-D544BF2EBCEC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DashService.Runtime", "DashService.Runtime\DashService.Runtime.csproj", "{43BB518D-C0E8-483C-B930-515647998243}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,10 +65,6 @@ Global
 		{1E50EC9B-A8CD-4694-9F2B-ACCC325E6A77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E50EC9B-A8CD-4694-9F2B-ACCC325E6A77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E50EC9B-A8CD-4694-9F2B-ACCC325E6A77}.Release|Any CPU.Build.0 = Release|Any CPU
-		{579C5A9D-6C96-4F25-889B-9EFCC8B428DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{579C5A9D-6C96-4F25-889B-9EFCC8B428DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{579C5A9D-6C96-4F25-889B-9EFCC8B428DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{579C5A9D-6C96-4F25-889B-9EFCC8B428DA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AEE751B5-7B7B-40FC-B723-B110EDE08287}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AEE751B5-7B7B-40FC-B723-B110EDE08287}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AEE751B5-7B7B-40FC-B723-B110EDE08287}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -75,6 +73,14 @@ Global
 		{084A538B-80BD-4E52-861D-0C7467A92648}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{084A538B-80BD-4E52-861D-0C7467A92648}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{084A538B-80BD-4E52-861D-0C7467A92648}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED8D70E4-87D4-4EBF-A8F7-D544BF2EBCEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED8D70E4-87D4-4EBF-A8F7-D544BF2EBCEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED8D70E4-87D4-4EBF-A8F7-D544BF2EBCEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED8D70E4-87D4-4EBF-A8F7-D544BF2EBCEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43BB518D-C0E8-483C-B930-515647998243}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43BB518D-C0E8-483C-B930-515647998243}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43BB518D-C0E8-483C-B930-515647998243}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43BB518D-C0E8-483C-B930-515647998243}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

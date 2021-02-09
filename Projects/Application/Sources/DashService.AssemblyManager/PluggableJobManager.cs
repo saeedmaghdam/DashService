@@ -12,10 +12,17 @@ using DashService.JobHandler.Models;
 
 namespace DashService.JobHandler
 {
-    public static class PluggableJobManager
+    public class PluggableJobManager : IPluggableJobManager
     {
+        private readonly ICustomContainer _customContainer;
+
+        public PluggableJobManager(ICustomContainer customContainer)
+        {
+            _customContainer = customContainer;
+        }
+
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static Context.Models.JobInstance Load(string jobsPath)
+        public IJobInstance Load(string jobsPath)
         {
             var dllFiles = Directory.GetFiles(jobsPath, "*.dll");
 
@@ -85,23 +92,23 @@ namespace DashService.JobHandler
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static void LoadDirectory(string pluginsPath)
+        public void LoadDirectory(string pluginsPath)
         {
             if (!Directory.Exists(pluginsPath))
                 throw new Exception("Jobs folder does not exists in bin directory");
 
             foreach (var directory in Directory.GetDirectories(pluginsPath))
-                PluggableJobManager.Load(directory);
+                Load(directory);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static void Unload(IJobInstance pluginableJobInstance)
+        public void Unload(IJobInstance pluginableJobInstance)
         {
             pluginableJobInstance.JobAssembly.HostAssemblyLoadContext.Unload();
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        private static object Instance(Type jobType, IContainer container)
+        private object Instance(Type jobType, IContainer container)
         {
             Type instanceType = jobType;
             var constructorInfos = instanceType.GetConstructors();
@@ -113,8 +120,8 @@ namespace DashService.JobHandler
             {
                 var parameterInfo = constructorParamsInfo[i];
                 var parameterType = parameterInfo.ParameterType;
-                if (Context.Autofac.Container.IsRegistered(parameterType))
-                    constructorParams[i] = Context.Autofac.Container.Resolve(parameterType);
+                if (_customContainer.AutofacContainer.IsRegistered(parameterType))
+                    constructorParams[i] = _customContainer.AutofacContainer.Resolve(parameterType);
                 else
                     constructorParams[i] = container.Resolve(parameterType);
             }

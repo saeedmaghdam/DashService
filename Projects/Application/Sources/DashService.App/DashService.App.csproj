@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -20,6 +20,7 @@
     <ProjectReference Include="..\DashService.Job.Abstraction\DashService.Job.Abstraction.csproj" />
     <ProjectReference Include="..\DashService.Job\DashService.Job.csproj" />
     <ProjectReference Include="..\DashService.Logger\DashService.Logger.csproj" />
+    <ProjectReference Include="..\DashService.Runtime\DashService.Runtime.csproj" />
     <ProjectReference Include="..\DashService.WebApi\DashService.WebApi.csproj" />
     <ProjectReference Include="..\DashService.Worker\DashService.Worker.csproj" />
   </ItemGroup>

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -9,9 +9,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DashService.Context\DashService.Context.csproj" />
+    <ProjectReference Include="..\DashService.AssemblyManager\DashService.JobHandler.csproj" />
     <ProjectReference Include="..\DashService.Framework\DashService.Framework.csproj" />
-    <ProjectReference Include="..\DashService.Job.Abstraction\DashService.Job.Abstraction.csproj" />
+    <ProjectReference Include="..\DashService.Job.DI\DashService.Context.DI.csproj" />
+    <ProjectReference Include="..\DashService.Logger\DashService.Logger.csproj" />
   </ItemGroup>
 
 </Project>

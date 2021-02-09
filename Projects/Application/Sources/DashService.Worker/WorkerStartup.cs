@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using DashService.Framework;
-using DashService.JobHandler;
 using Microsoft.Extensions.Hosting;
 using DashService.Logger;
 
@@ -13,13 +12,15 @@ namespace DashService.Worker
     public class WorkerStartup : IHostedService
     {
         private readonly ILogger _logger;
+        private readonly IPluggableJobManager _pluggableJobManager;
 
-        public WorkerStartup(ILogger logger)
+        public WorkerStartup(ILogger logger, IPluggableJobManager pluggableJobManager)
         {
             _logger = logger;
+            _pluggableJobManager = pluggableJobManager;
 
             var pluginsPath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "Jobs");
-            PluggableJobManager.LoadDirectory(pluginsPath);
+            _pluggableJobManager.LoadDirectory(pluginsPath);
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)

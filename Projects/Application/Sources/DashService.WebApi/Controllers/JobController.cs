@@ -2,15 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DashService.Framework;
 
 namespace DashService.WebApi.Controllers
 {
     public class JobController : Controller
     {
+        private readonly IJobContainer _jobContainer;
+
+        public JobController(IJobContainer jobContainer)
+        {
+            _jobContainer = jobContainer;
+        }
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var jobs = Context.JobContainer.JobInstances;
+            var jobs = _jobContainer.JobInstances;
 
             return await Task.FromResult(
                 Ok(new ApiResult<IEnumerable<dynamic>>(jobs.Select(job => new {

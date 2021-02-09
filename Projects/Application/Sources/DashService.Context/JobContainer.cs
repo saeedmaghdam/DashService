@@ -3,11 +3,11 @@ using DashService.Framework;
 
 namespace DashService.Context
 {
-    public static class JobContainer
+    public class JobContainer : IJobContainer
     {
         private static List<IJobInstance> _jobInstances = new List<IJobInstance>();
 
-        public static void Register(IEnumerable<IJobInstance> JobInstances)
+        public void Register(IEnumerable<IJobInstance> JobInstances)
         {
             foreach (var jobInstance in JobInstances)
             {
@@ -15,11 +15,11 @@ namespace DashService.Context
             }
         }
 
-        public static void Register(IJobInstance jobInstance)
+        public void Register(IJobInstance jobInstance)
         {
             _jobInstances.Add(jobInstance);
         }
 
-        public static IEnumerable<IJobInstance> JobInstances => _jobInstances;
+        public IEnumerable<IJobInstance> JobInstances => _jobInstances;
     }
 }

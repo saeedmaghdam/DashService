@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Autofac;
-using DashService.Context;
 using DashService.Context.Models;
 using DashService.Framework;
 using DashService.Job.Abstraction;
@@ -15,10 +14,12 @@ namespace DashService.JobHandler
     public class PluggableJobManager : IPluggableJobManager
     {
         private readonly ICustomContainer _customContainer;
+        private readonly IJobContainer _jobContainer;
 
-        public PluggableJobManager(ICustomContainer customContainer)
+        public PluggableJobManager(ICustomContainer customContainer, IJobContainer jobContainer)
         {
             _customContainer = customContainer;
+            _jobContainer = jobContainer;
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -86,7 +87,7 @@ namespace DashService.JobHandler
 
             var jobInstanceModel = new JobInstance(jobAssembly);
 
-            JobContainer.Register(jobInstanceModel);
+            _jobContainer.Register(jobInstanceModel);
 
             return jobInstanceModel;
         }

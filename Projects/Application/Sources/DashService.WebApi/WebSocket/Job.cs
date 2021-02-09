@@ -2,15 +2,19 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac;
 using DashService.Framework;
 
 namespace DashService.WebApi.WebSocket
 {
-    public static class Job
+    public class Job
     {
         public static async Task Start(Guid jobViewId)
         {
-            var jobInstance = Context.JobContainer.JobInstances.Where(x => x.JobAssembly.UniqueId == jobViewId).SingleOrDefault();
+            var autofacContainer = new Context.DI.CustomContainer();
+            var jobContainer = autofacContainer.AutofacContainer.Resolve<IJobContainer>();
+
+            var jobInstance = jobContainer.JobInstances.Where(x => x.JobAssembly.UniqueId == jobViewId).SingleOrDefault();
 
             if (jobInstance.JobStatus != JobStatus.Running)
             {
@@ -32,7 +36,10 @@ namespace DashService.WebApi.WebSocket
 
         public static async Task Stop(Guid jobViewId)
         {
-            var jobInstance = Context.JobContainer.JobInstances.Where(x => x.JobAssembly.UniqueId == jobViewId).SingleOrDefault();
+            var autofacContainer = new Context.DI.CustomContainer();
+            var jobContainer = autofacContainer.AutofacContainer.Resolve<IJobContainer>();
+
+            var jobInstance = jobContainer.JobInstances.Where(x => x.JobAssembly.UniqueId == jobViewId).SingleOrDefault();
 
             if (jobInstance.JobStatus == JobStatus.Running || jobInstance.JobStatus == JobStatus.Paused)
             {

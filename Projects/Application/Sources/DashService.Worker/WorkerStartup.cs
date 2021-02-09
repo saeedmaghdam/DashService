@@ -13,11 +13,13 @@ namespace DashService.Worker
     {
         private readonly ILogger _logger;
         private readonly IPluggableJobManager _pluggableJobManager;
+        private readonly IJobContainer _jobContainer;
 
-        public WorkerStartup(ILogger logger, IPluggableJobManager pluggableJobManager)
+        public WorkerStartup(ILogger logger, IPluggableJobManager pluggableJobManager, IJobContainer jobContainer)
         {
             _logger = logger;
             _pluggableJobManager = pluggableJobManager;
+            _jobContainer = jobContainer;
 
             var pluginsPath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "Jobs");
             _pluggableJobManager.LoadDirectory(pluginsPath);
@@ -27,7 +29,7 @@ namespace DashService.Worker
         {
             _logger.Information($"DashService was starting the micro services at: {DateTimeOffset.Now}");
 
-            foreach (var jobInstance in Context.JobContainer.JobInstances.ToList())
+            foreach (var jobInstance in _jobContainer.JobInstances.ToList())
             {
                 var jobCancellationTokenSource = jobInstance.StartCancellationTokenSource;
                 jobInstance.JobStartingTask = Task.Run(() => { jobInstance.JobAssembly.Instance.StartAsync(jobInstance.StartCancellationTokenSource.Token); }, jobCancellationTokenSource.Token);
@@ -54,7 +56,7 @@ namespace DashService.Worker
         {
             _logger.Information($"DashService was stopping the micro services at: {DateTimeOffset.Now}");
 
-            foreach (var jobInstance in Context.JobContainer.JobInstances.ToList())
+            foreach (var jobInstance in _jobContainer.JobInstances.ToList())
             {
                 if (jobInstance.JobStatus == JobStatus.Running || jobInstance.JobStatus == JobStatus.Paused)
                 {
@@ -64,7 +66,7 @@ namespace DashService.Worker
                 }
             }
 
-            Task.WaitAll(Context.JobContainer.JobInstances.Select(x => x.JobStoppingTask).ToArray());
+            Task.WaitAll(_jobContainer.JobInstances.Select(x => x.JobStoppingTask).ToArray());
 
             _logger.Information($"DashService stopped at: {DateTimeOffset.Now}");
         }

@@ -27,6 +27,8 @@ namespace DashService.Worker
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
+            Context.Common.CancellationToken = cancellationToken;
+
             _logger.Information($"DashService was starting the micro services at: {DateTimeOffset.Now}");
 
             foreach (var jobInstance in _jobContainer.JobInstances.ToList())

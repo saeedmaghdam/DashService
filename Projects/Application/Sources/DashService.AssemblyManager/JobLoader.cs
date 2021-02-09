@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using Autofac;
 using DashService.Framework;
+using DashService.Framework.Utils;
 using DashService.Job.Abstraction;
 using DashService.JobHandler.Models;
 
@@ -13,10 +14,12 @@ namespace DashService.JobHandler
     public class JobLoader : IJobLoader
     {
         private readonly ICustomContainer _customContainer;
+        private readonly IFileHelper _fileHelper;
 
-        public JobLoader(ICustomContainer customContainer)
+        public JobLoader(ICustomContainer customContainer, IFileHelper fileHelper)
         {
             _customContainer = customContainer;
+            _fileHelper = fileHelper;
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -79,7 +82,8 @@ namespace DashService.JobHandler
                 Assembly = assembly,
                 HostAssemblyLoadContext = alc,
                 WeakReference = alcWeakRef,
-                JobFullPath = jobFilePath
+                JobFullPath = jobFilePath,
+                FileMD5Hash = _fileHelper.CalculateMD5(jobFilePath)
             };
 
             return jobAssembly;

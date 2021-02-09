@@ -13,6 +13,7 @@
     <ProjectReference Include="..\DashService.Framework\DashService.Framework.csproj" />
     <ProjectReference Include="..\DashService.Job.DI\DashService.Context.DI.csproj" />
     <ProjectReference Include="..\DashService.Logger\DashService.Logger.csproj" />
+    <ProjectReference Include="..\DashService.Utils\DashService.Utils.csproj" />
   </ItemGroup>
 
 </Project>

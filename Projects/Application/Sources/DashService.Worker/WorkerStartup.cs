@@ -13,11 +13,13 @@ namespace DashService.Worker
     {
         private readonly ILogger _logger;
         private readonly IJobContainer _jobContainer;
+        private readonly IJobLoader _jobLoader;
 
-        public WorkerStartup(ILogger logger, IJobContainer jobContainer)
+        public WorkerStartup(ILogger logger, IJobContainer jobContainer, IJobLoader jobLoader)
         {
             _logger = logger;
             _jobContainer = jobContainer;
+            _jobLoader = jobLoader;
 
             var pluginsPath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "Jobs");
             _jobContainer.LoadDirectory(pluginsPath);
@@ -29,8 +31,7 @@ namespace DashService.Worker
 
             foreach (var jobInstance in _jobContainer.JobInstances.ToList())
             {
-                var jobCancellationTokenSource = jobInstance.StartCancellationTokenSource;
-                jobInstance.JobStartingTask = Task.Run(() => { jobInstance.JobAssembly.Instance.StartAsync(jobInstance.StartCancellationTokenSource.Token); }, jobCancellationTokenSource.Token);
+                jobInstance.JobStartingTask = jobInstance.StartAsync(cancellationToken);
                 jobInstance.JobStatus = JobStatus.Running;
             }
 
@@ -43,9 +44,9 @@ namespace DashService.Worker
 
                 try
                 {
-                    Task.Delay(60000, cancellationToken).Wait();
+                    Task.Delay(60000, cancellationToken).Wait(cancellationToken);
                 }
-                catch (Exception) { }
+                catch { }
             }
             while (true);
         }
@@ -58,13 +59,16 @@ namespace DashService.Worker
             {
                 if (jobInstance.JobStatus == JobStatus.Running || jobInstance.JobStatus == JobStatus.Paused)
                 {
-                    jobInstance.StartCancellationTokenSource.Cancel();
-                    var jobCancellationTokenSource = jobInstance.StopCancellationTokenSource;
-                    jobInstance.JobStoppingTask = Task.Run(() => { jobInstance.JobAssembly.Instance.StopAsync(jobInstance.StopCancellationTokenSource.Token); }, CancellationToken.None);
+                    jobInstance.JobLoadCancellationTokenSource.Cancel();
+                    jobInstance.JobStoppingTask = jobInstance.StopAsync(cancellationToken);
                 }
             }
 
-            Task.WaitAll(_jobContainer.JobInstances.Select(x => x.JobStoppingTask).ToArray());
+            try
+            {
+                Task.WaitAll(_jobContainer.JobInstances.Select(x => x.JobStoppingTask).ToArray(), cancellationToken);
+            }
+            catch { }
 
             _logger.Information($"DashService stopped at: {DateTimeOffset.Now}");
         }

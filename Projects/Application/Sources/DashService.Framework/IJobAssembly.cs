@@ -41,5 +41,11 @@ namespace DashService.Framework
             get;
             set;
         }
+
+        string FileMD5Hash
+        {
+            get;
+            set;
+        }
     }
 }

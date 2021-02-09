@@ -42,5 +42,11 @@ namespace DashService.JobHandler.Models
             get;
             set;
         }
+
+        public string FileMD5Hash
+        {
+            get;
+            set;
+        }
     }
 }

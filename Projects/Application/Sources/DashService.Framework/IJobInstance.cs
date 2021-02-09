@@ -5,13 +5,13 @@ namespace DashService.Framework
 {
     public interface IJobInstance
     {
-        CancellationTokenSource StartCancellationTokenSource
+        CancellationTokenSource JobLoadCancellationTokenSource
         {
             get;
             set;
         }
 
-        CancellationTokenSource StopCancellationTokenSource
+        CancellationTokenSource JobUnloadCancellationTokenSource
         {
             get;
             set;
@@ -40,5 +40,15 @@ namespace DashService.Framework
             get;
             set;
         }
+
+        bool UpdatingMode
+        {
+            get;
+            set;
+        }
+
+        Task<Task> StartAsync(CancellationToken cancellationToken);
+
+        Task<Task> StopAsync(CancellationToken cancellationToken);
     }
 }

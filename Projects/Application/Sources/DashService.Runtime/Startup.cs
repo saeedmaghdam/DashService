@@ -13,6 +13,8 @@ namespace DashService.Runtime
             builder.RegisterType<JobHandler.JobLoader>().As<Framework.IJobLoader>();
 
             builder.RegisterType<JobHandler.JobContainer>().As<Framework.IJobContainer>();
+
+            builder.RegisterType<Utils.FileHelper>().As<Framework.Utils.IFileHelper>();
         }
     }
 }

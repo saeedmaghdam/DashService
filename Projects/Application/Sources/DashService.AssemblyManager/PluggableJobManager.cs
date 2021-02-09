@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Autofac;
-using DashService.Context.Models;
 using DashService.Framework;
 using DashService.Job.Abstraction;
 using DashService.JobHandler.Models;

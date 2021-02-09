@@ -16,7 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DashService.Context\DashService.Context.csproj" />
     <ProjectReference Include="..\DashService.Job.Abstraction\DashService.Job.Abstraction.csproj" />
     <ProjectReference Include="..\DashService.Job\DashService.Job.csproj" />
     <ProjectReference Include="..\DashService.Logger\DashService.Logger.csproj" />

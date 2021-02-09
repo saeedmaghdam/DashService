@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using DashService.Framework;
 
-namespace DashService.Context.Models
+namespace DashService.JobHandler.Models
 {
     public class JobInstance : IJobInstance
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using DashService.Framework;
 
-namespace DashService.Context
+namespace DashService.JobHandler
 {
     public class JobContainer : IJobContainer
     {

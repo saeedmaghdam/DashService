@@ -4,7 +4,7 @@ using DashService.Framework;
 
 namespace DashService.Context.Models
 {
-    public class JobStructure : IJobStructure
+    public class JobInstance : IJobInstance
     {
         public CancellationTokenSource StartCancellationTokenSource
         {
@@ -35,15 +35,15 @@ namespace DashService.Context.Models
             get;
             set;
         }
-        public IPluggedinAssemblyModel PluggedinAssembly
+        public IJobAssembly JobAssembly
         {
             get;
             set;
         }
 
-        public JobStructure(IPluggedinAssemblyModel pluggedinAssembly)
+        public JobInstance(IJobAssembly jobAssembly)
         {
-            PluggedinAssembly = pluggedinAssembly;
+            JobAssembly = jobAssembly;
 
             StartCancellationTokenSource = new CancellationTokenSource();
             StopCancellationTokenSource = new CancellationTokenSource();

@@ -5,21 +5,21 @@ namespace DashService.Context
 {
     public static class JobContainer
     {
-        private static List<IJobStructure> _pluginableJobs = new List<IJobStructure>();
+        private static List<IJobInstance> _jobInstances = new List<IJobInstance>();
 
-        public static void Register(IEnumerable<IJobStructure> pluginableJobs)
+        public static void Register(IEnumerable<IJobInstance> JobInstances)
         {
-            foreach (var pluginableJob in pluginableJobs)
+            foreach (var jobInstance in JobInstances)
             {
-                Register(pluginableJob);
+                Register(jobInstance);
             }
         }
 
-        public static void Register(IJobStructure pluginableJob)
+        public static void Register(IJobInstance jobInstance)
         {
-            _pluginableJobs.Add(pluginableJob);
+            _jobInstances.Add(jobInstance);
         }
 
-        public static IEnumerable<IJobStructure> PluginableJobs => _pluginableJobs;
+        public static IEnumerable<IJobInstance> JobInstances => _jobInstances;
     }
 }

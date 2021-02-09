@@ -1,41 +1,41 @@
-﻿using System;
-using System.Reflection;
-using DashService.Job.Abstraction;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace DashService.Framework
 {
-    public interface IPluggedinAssemblyModel
+    public interface IJobInstance
     {
-        IJob JobInstance
-        {
-            get;
-            set;
-        }
-        Guid UniqueId
+        CancellationTokenSource StartCancellationTokenSource
         {
             get;
             set;
         }
 
-        Assembly Assembly
+        CancellationTokenSource StopCancellationTokenSource
         {
             get;
             set;
         }
 
-        HostAssemblyLoadContext HostAssemblyLoadContext
+        Task JobStartingTask
         {
             get;
             set;
         }
 
-        WeakReference WeakReference
+        Task JobStoppingTask
         {
             get;
             set;
         }
 
-        string JobFullPath
+        JobStatus JobStatus
+        {
+            get;
+            set;
+        }
+
+        IJobAssembly JobAssembly
         {
             get;
             set;

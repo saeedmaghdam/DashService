@@ -5,9 +5,9 @@ using DashService.Job.Abstraction;
 
 namespace DashService.JobHandler.Models
 {
-    public class PluggedinAssemblyModel : IPluggedinAssemblyModel
+    public class JobAssembly : IJobAssembly
     {
-        public IJob JobInstance
+        public IJob Instance
         {
             get;
             set;

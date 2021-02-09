@@ -26,11 +26,11 @@ namespace DashService.Worker
         {
             _logger.Information($"DashService was starting the micro services at: {DateTimeOffset.Now}");
 
-            foreach (var jobStructure in Context.JobContainer.PluginableJobs.ToList())
+            foreach (var jobInstance in Context.JobContainer.JobInstances.ToList())
             {
-                var jobCancellationTokenSource = jobStructure.StartCancellationTokenSource;
-                jobStructure.JobStartingTask = Task.Run(() => { jobStructure.PluggedinAssembly.JobInstance.StartAsync(jobStructure.StartCancellationTokenSource.Token); }, jobCancellationTokenSource.Token);
-                jobStructure.JobStatus = JobStatus.Running;
+                var jobCancellationTokenSource = jobInstance.StartCancellationTokenSource;
+                jobInstance.JobStartingTask = Task.Run(() => { jobInstance.JobAssembly.Instance.StartAsync(jobInstance.StartCancellationTokenSource.Token); }, jobCancellationTokenSource.Token);
+                jobInstance.JobStatus = JobStatus.Running;
             }
 
             _logger.Information($"DashService started at: {DateTimeOffset.Now}");
@@ -53,17 +53,17 @@ namespace DashService.Worker
         {
             _logger.Information($"DashService was stopping the micro services at: {DateTimeOffset.Now}");
 
-            foreach (var jobStructure in Context.JobContainer.PluginableJobs.ToList())
+            foreach (var jobInstance in Context.JobContainer.JobInstances.ToList())
             {
-                if (jobStructure.JobStatus == JobStatus.Running || jobStructure.JobStatus == JobStatus.Paused)
+                if (jobInstance.JobStatus == JobStatus.Running || jobInstance.JobStatus == JobStatus.Paused)
                 {
-                    jobStructure.StartCancellationTokenSource.Cancel();
-                    var jobCancellationTokenSource = jobStructure.StopCancellationTokenSource;
-                    jobStructure.JobStoppingTask = Task.Run(() => { jobStructure.PluggedinAssembly.JobInstance.StopAsync(jobStructure.StopCancellationTokenSource.Token); }, CancellationToken.None);
+                    jobInstance.StartCancellationTokenSource.Cancel();
+                    var jobCancellationTokenSource = jobInstance.StopCancellationTokenSource;
+                    jobInstance.JobStoppingTask = Task.Run(() => { jobInstance.JobAssembly.Instance.StopAsync(jobInstance.StopCancellationTokenSource.Token); }, CancellationToken.None);
                 }
             }
 
-            Task.WaitAll(Context.JobContainer.PluginableJobs.Select(x => x.JobStoppingTask).ToArray());
+            Task.WaitAll(Context.JobContainer.JobInstances.Select(x => x.JobStoppingTask).ToArray());
 
             _logger.Information($"DashService stopped at: {DateTimeOffset.Now}");
         }

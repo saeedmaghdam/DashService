@@ -15,7 +15,7 @@ namespace DashService.JobHandler
     public static class PluggableJobManager
     {
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static JobStructure Load(string jobsPath)
+        public static Context.Models.JobInstance Load(string jobsPath)
         {
             var dllFiles = Directory.GetFiles(jobsPath, "*.dll");
 
@@ -67,9 +67,9 @@ namespace DashService.JobHandler
             var container = containerBuilder.Build();
             var jobInstance = (IJob)Instance(jobType, container);
 
-            var pluggedinAssembly = new PluggedinAssemblyModel()
+            var jobAssembly = new JobAssembly()
             {
-                JobInstance = jobInstance,
+                Instance = jobInstance,
                 UniqueId = Guid.NewGuid(),
                 Assembly = assembly,
                 HostAssemblyLoadContext = alc,
@@ -77,11 +77,11 @@ namespace DashService.JobHandler
                 JobFullPath = jobFilePath
             };
 
-            var jobStructure = new JobStructure(pluggedinAssembly);
+            var jobInstanceModel = new JobInstance(jobAssembly);
 
-            JobContainer.Register(jobStructure);
+            JobContainer.Register(jobInstanceModel);
 
-            return jobStructure;
+            return jobInstanceModel;
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -95,9 +95,9 @@ namespace DashService.JobHandler
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static void Unload(IJobStructure pluginableJobModel)
+        public static void Unload(IJobInstance pluginableJobInstance)
         {
-            pluginableJobModel.PluggedinAssembly.HostAssemblyLoadContext.Unload();
+            pluginableJobInstance.JobAssembly.HostAssemblyLoadContext.Unload();
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]

@@ -10,44 +10,44 @@ namespace DashService.WebApi.WebSocket
     {
         public static async Task Start(Guid jobViewId)
         {
-            var jobStructure = Context.JobContainer.PluginableJobs.Where(x => x.PluggedinAssembly.UniqueId == jobViewId).SingleOrDefault();
+            var jobInstance = Context.JobContainer.JobInstances.Where(x => x.JobAssembly.UniqueId == jobViewId).SingleOrDefault();
 
-            if (jobStructure.JobStatus != JobStatus.Running)
+            if (jobInstance.JobStatus != JobStatus.Running)
             {
-                jobStructure.StartCancellationTokenSource = new CancellationTokenSource();
-                jobStructure.StopCancellationTokenSource = new CancellationTokenSource();
-                jobStructure.JobStartingTask = Task.Run(() => { jobStructure.PluggedinAssembly.JobInstance.StartAsync(jobStructure.StartCancellationTokenSource.Token); }, CancellationToken.None);
+                jobInstance.StartCancellationTokenSource = new CancellationTokenSource();
+                jobInstance.StopCancellationTokenSource = new CancellationTokenSource();
+                jobInstance.JobStartingTask = Task.Run(() => { jobInstance.JobAssembly.Instance.StartAsync(jobInstance.StartCancellationTokenSource.Token); }, CancellationToken.None);
                 Socket.CallClientMethod(@"
 {
     ""command"": ""change_status"",
     ""data"": {
-        ""view_id"": """ + jobStructure.PluggedinAssembly.UniqueId + @""",
+        ""view_id"": """ + jobInstance.JobAssembly.UniqueId + @""",
         ""status"": """ + TaskStatus.Running.ToString() + @"""
     }
 }
 ");
-                jobStructure.JobStatus = JobStatus.Running;
+                jobInstance.JobStatus = JobStatus.Running;
             }
         }
 
         public static async Task Stop(Guid jobViewId)
         {
-            var jobStructure = Context.JobContainer.PluginableJobs.Where(x => x.PluggedinAssembly.UniqueId == jobViewId).SingleOrDefault();
+            var jobInstance = Context.JobContainer.JobInstances.Where(x => x.JobAssembly.UniqueId == jobViewId).SingleOrDefault();
 
-            if (jobStructure.JobStatus == JobStatus.Running || jobStructure.JobStatus == JobStatus.Paused)
+            if (jobInstance.JobStatus == JobStatus.Running || jobInstance.JobStatus == JobStatus.Paused)
             {
-                jobStructure.StartCancellationTokenSource.Cancel();
-                jobStructure.JobStoppingTask = Task.Run(() => { jobStructure.PluggedinAssembly.JobInstance.StopAsync(jobStructure.StopCancellationTokenSource.Token); }, CancellationToken.None);
+                jobInstance.StartCancellationTokenSource.Cancel();
+                jobInstance.JobStoppingTask = Task.Run(() => { jobInstance.JobAssembly.Instance.StopAsync(jobInstance.StopCancellationTokenSource.Token); }, CancellationToken.None);
                 Socket.CallClientMethod(@"
 {
     ""command"": ""change_status"",
     ""data"": {
-        ""view_id"": """ + jobStructure.PluggedinAssembly.UniqueId + @""",
+        ""view_id"": """ + jobInstance.JobAssembly.UniqueId + @""",
         ""status"": """ + TaskStatus.Canceled.ToString() + @"""
     }
 }
 ");
-                jobStructure.JobStatus = JobStatus.Stopped;
+                jobInstance.JobStatus = JobStatus.Stopped;
             }
         }
     }

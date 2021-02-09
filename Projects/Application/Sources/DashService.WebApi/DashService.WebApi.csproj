@@ -12,7 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DashService.Framework\DashService.Framework.csproj" />
     <ProjectReference Include="..\DashService.Job.Abstraction\DashService.Job.Abstraction.csproj" />
-    <ProjectReference Include="..\DashService.Job.DI\DashService.Context.DI.csproj" />
+    <ProjectReference Include="..\DashService.Job.DI\DashService.Context.csproj" />
   </ItemGroup>
 
 </Project>

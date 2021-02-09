@@ -2,7 +2,7 @@
 
 namespace DashService.Framework
 {
-    public interface ICustomContainer
+    public interface ICustomDIContainer
     {
         IContainer AutofacContainer
         {

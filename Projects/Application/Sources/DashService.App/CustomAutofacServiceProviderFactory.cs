@@ -61,7 +61,7 @@ namespace DashService.App
             if (containerBuilder == null) throw new ArgumentNullException(nameof(containerBuilder));
 
             var container = containerBuilder.Build(_containerBuildOptions);
-            Context.DI.CustomContainer.SetAutofacContainer(container);
+            Context.CustomDIContainer.SetAutofacContainer(container);
 
             return new AutofacServiceProvider(container);
         }

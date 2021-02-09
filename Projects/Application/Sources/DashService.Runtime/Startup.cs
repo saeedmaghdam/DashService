@@ -8,7 +8,7 @@ namespace DashService.Runtime
         {
             Logger.DependencyRegistration.RegisterModules(builder);
 
-            builder.RegisterType<Context.DI.CustomContainer>().As<Framework.ICustomContainer>();
+            builder.RegisterType<Context.CustomDIContainer>().As<Framework.ICustomDIContainer>();
 
             builder.RegisterType<JobHandler.JobLoader>().As<Framework.IJobLoader>();
 

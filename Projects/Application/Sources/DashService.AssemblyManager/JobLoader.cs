@@ -13,10 +13,10 @@ namespace DashService.JobHandler
 {
     public class JobLoader : IJobLoader
     {
-        private readonly ICustomContainer _customContainer;
+        private readonly ICustomDIContainer _customContainer;
         private readonly IFileHelper _fileHelper;
 
-        public JobLoader(ICustomContainer customContainer, IFileHelper fileHelper)
+        public JobLoader(ICustomDIContainer customContainer, IFileHelper fileHelper)
         {
             _customContainer = customContainer;
             _fileHelper = fileHelper;

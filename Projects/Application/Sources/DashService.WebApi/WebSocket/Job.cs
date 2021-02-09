@@ -11,7 +11,7 @@ namespace DashService.WebApi.WebSocket
     {
         public static async Task Start(Guid jobViewId)
         {
-            var autofacContainer = new Context.DI.CustomContainer();
+            var autofacContainer = new Context.CustomDIContainer();
             var jobContainer = autofacContainer.AutofacContainer.Resolve<IJobContainer>();
 
             var jobInstance = jobContainer.JobInstances.Where(x => x.JobAssembly.UniqueId == jobViewId).SingleOrDefault();
@@ -36,7 +36,7 @@ namespace DashService.WebApi.WebSocket
 
         public static async Task Stop(Guid jobViewId)
         {
-            var autofacContainer = new Context.DI.CustomContainer();
+            var autofacContainer = new Context.CustomDIContainer();
             var jobContainer = autofacContainer.AutofacContainer.Resolve<IJobContainer>();
 
             var jobInstance = jobContainer.JobInstances.Where(x => x.JobAssembly.UniqueId == jobViewId).SingleOrDefault();

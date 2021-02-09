@@ -1,9 +1,9 @@
 ﻿using Autofac;
 using DashService.Framework;
 
-namespace DashService.Context.DI
+namespace DashService.Context
 {
-    public class CustomContainer : ICustomContainer
+    public class CustomDIContainer : ICustomDIContainer
     {
         private static IContainer _container;
 

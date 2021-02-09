@@ -10,19 +10,17 @@ using DashService.JobHandler.Models;
 
 namespace DashService.JobHandler
 {
-    public class PluggableJobManager : IPluggableJobManager
+    public class JobLoader : IJobLoader
     {
         private readonly ICustomContainer _customContainer;
-        private readonly IJobContainer _jobContainer;
 
-        public PluggableJobManager(ICustomContainer customContainer, IJobContainer jobContainer)
+        public JobLoader(ICustomContainer customContainer)
         {
             _customContainer = customContainer;
-            _jobContainer = jobContainer;
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public IJobInstance Load(string jobsPath)
+        public IJobAssembly Load(string jobsPath)
         {
             var dllFiles = Directory.GetFiles(jobsPath, "*.dll");
 
@@ -84,21 +82,7 @@ namespace DashService.JobHandler
                 JobFullPath = jobFilePath
             };
 
-            var jobInstanceModel = new JobInstance(jobAssembly);
-
-            _jobContainer.Register(jobInstanceModel);
-
-            return jobInstanceModel;
-        }
-
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        public void LoadDirectory(string pluginsPath)
-        {
-            if (!Directory.Exists(pluginsPath))
-                throw new Exception("Jobs folder does not exists in bin directory");
-
-            foreach (var directory in Directory.GetDirectories(pluginsPath))
-                Load(directory);
+            return jobAssembly;
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]

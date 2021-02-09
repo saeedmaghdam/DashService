@@ -10,7 +10,7 @@ namespace DashService.Runtime
 
             builder.RegisterType<Context.DI.CustomContainer>().As<Framework.ICustomContainer>();
 
-            builder.RegisterType<JobHandler.PluggableJobManager>().As<Framework.IPluggableJobManager>();
+            builder.RegisterType<JobHandler.JobLoader>().As<Framework.IJobLoader>();
 
             builder.RegisterType<JobHandler.JobContainer>().As<Framework.IJobContainer>();
         }

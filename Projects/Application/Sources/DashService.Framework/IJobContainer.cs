@@ -9,8 +9,8 @@ namespace DashService.Framework
             get;
         }
 
-        void Register(IEnumerable<IJobInstance> JobInstances);
+        void Load(string jobPath);
 
-        void Register(IJobInstance jobInstance);
+        void LoadDirectory(string jobsPath);
     }
 }

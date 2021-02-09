@@ -11,6 +11,7 @@ namespace DashService.Framework
             get;
             set;
         }
+
         Guid UniqueId
         {
             get;

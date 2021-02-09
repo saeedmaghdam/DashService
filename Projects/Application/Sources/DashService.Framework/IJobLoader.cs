@@ -1,10 +1,8 @@
 ﻿namespace DashService.Framework
 {
-    public interface IPluggableJobManager
+    public interface IJobLoader
     {
-        IJobInstance Load(string jobsPath);
-
-        void LoadDirectory(string pluginsPath);
+        IJobAssembly Load(string jobsPath);
 
         void Unload(IJobInstance pluginableJobInstance);
     }

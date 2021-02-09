@@ -12,17 +12,15 @@ namespace DashService.Worker
     public class WorkerStartup : IHostedService
     {
         private readonly ILogger _logger;
-        private readonly IPluggableJobManager _pluggableJobManager;
         private readonly IJobContainer _jobContainer;
 
-        public WorkerStartup(ILogger logger, IPluggableJobManager pluggableJobManager, IJobContainer jobContainer)
+        public WorkerStartup(ILogger logger, IJobContainer jobContainer)
         {
             _logger = logger;
-            _pluggableJobManager = pluggableJobManager;
             _jobContainer = jobContainer;
 
             var pluginsPath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "Jobs");
-            _pluggableJobManager.LoadDirectory(pluginsPath);
+            _jobContainer.LoadDirectory(pluginsPath);
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)

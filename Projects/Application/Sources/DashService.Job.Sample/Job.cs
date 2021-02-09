@@ -1,6 +1,7 @@
 ﻿using DashService.Logger;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac;
 using DashService.Job.Abstraction;
 
 namespace DashService.Job.Sample
@@ -11,7 +12,7 @@ namespace DashService.Job.Sample
 
         public override string Name => "Sample Job";
         public override string Description => "Test Job";
-        public override string Version => "1.0.0";
+        public override string Version => "2.2.2";
 
         public Job(ILogger logger) : base(logger)
         {
@@ -20,14 +21,13 @@ namespace DashService.Job.Sample
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.Information("Hello, I'm the sample job 1!");
-
             do
             {
                 if (cancellationToken.IsCancellationRequested)
                     break;
 
-                _logger.Information("I'm sample job 1, I'm doing a process ...");
+                //_logger.Information("*************************************");
+                _logger.Information("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 
                 Task.Delay(3000, cancellationToken).Wait(cancellationToken);
             }
@@ -38,9 +38,14 @@ namespace DashService.Job.Sample
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.Information("I'm sample job 1! I've finished my task, thank you.");
+            _logger.Error("I'm sample job 1! I've finished my task, thank you.");
 
             return Task.CompletedTask;
+        }
+
+        public static void Register(ContainerBuilder builder)
+        {
+
         }
     }
 }

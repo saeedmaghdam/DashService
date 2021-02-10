@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using DashService.Framework;
-using DashService.Logger;
+using Microsoft.Extensions.Logging;
 
 namespace DashService.JobHandler.Models
 {
@@ -156,7 +156,7 @@ namespace DashService.JobHandler.Models
                                 }
                                 catch (Exception ex)
                                 {
-                                    _logger.Error("Couldn't load the job!");
+                                    _logger.LogError("Couldn't load the job!");
 
                                     if (retryCounter <= 60)
                                     {

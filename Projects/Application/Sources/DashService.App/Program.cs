@@ -1,7 +1,9 @@
 ﻿using Autofac;
+using DashService.Logger;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace DashService.App
 {
@@ -17,7 +19,11 @@ namespace DashService.App
             return Host.CreateDefaultBuilder(args)
                 .UseWindowsService()
                 .UseServiceProviderFactory(new CustomAutofacServiceProviderFactory())
-                .ConfigureContainer<ContainerBuilder>(ConfigureContainer)
+                .ConfigureLogging((hostingContext, logging) =>
+                {
+                    logging.ClearProviders();
+                    logging.AddProvider(new CustomLoggingProvider());
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<WebApi.HostStartup>();
@@ -25,7 +31,8 @@ namespace DashService.App
                 .ConfigureServices((hostBuilderContext, services) =>
                 {
                     services.AddHostedService<Worker.WorkerStartup>();
-                });
+                })
+                .ConfigureContainer<ContainerBuilder>(ConfigureContainer);
         }
 
         public static void ConfigureContainer(ContainerBuilder builder)

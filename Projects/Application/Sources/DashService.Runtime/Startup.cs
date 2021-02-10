@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Microsoft.Extensions.Logging;
 
 namespace DashService.Runtime
 {
@@ -6,7 +7,7 @@ namespace DashService.Runtime
     {
         public static void Configure(ContainerBuilder builder)
         {
-            Logger.DependencyRegistration.RegisterModules(builder);
+            builder.RegisterType<Logger.CustomLogger>().As<ILogger>();
 
             builder.RegisterType<Context.CustomDIContainer>().As<Framework.ICustomDIContainer>();
 

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using DashService.Framework;
 using Microsoft.Extensions.Hosting;
-using DashService.Logger;
+using Microsoft.Extensions.Logging;
 
 namespace DashService.Worker
 {
@@ -29,12 +29,12 @@ namespace DashService.Worker
         {
             Context.Common.CancellationToken = cancellationToken;
 
-            _logger.Information($"DashService was starting the micro services at: {DateTimeOffset.Now}");
+            _logger.LogInformation($"DashService was starting the micro services at: {DateTimeOffset.Now}");
 
             foreach (var jobInstance in _jobContainer.JobInstances.ToList())
                 jobInstance.JobStartingTask = jobInstance.StartAsync(cancellationToken);
 
-            _logger.Information($"DashService started at: {DateTimeOffset.Now}");
+            _logger.LogInformation($"DashService started at: {DateTimeOffset.Now}");
 
             do
             {
@@ -52,7 +52,7 @@ namespace DashService.Worker
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.Information($"DashService was stopping the micro services at: {DateTimeOffset.Now}");
+            _logger.LogInformation($"DashService was stopping the micro services at: {DateTimeOffset.Now}");
 
             foreach (var jobInstance in _jobContainer.JobInstances.ToList())
                 jobInstance.StopAsync(cancellationToken);
@@ -63,7 +63,7 @@ namespace DashService.Worker
             }
             catch { }
 
-            _logger.Information($"DashService stopped at: {DateTimeOffset.Now}");
+            _logger.LogInformation($"DashService stopped at: {DateTimeOffset.Now}");
         }
     }
 }

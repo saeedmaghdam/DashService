@@ -1,4 +1,4 @@
-﻿using DashService.Logger;
+﻿using Microsoft.Extensions.Logging;
 using System;
 
 namespace DashService.Job

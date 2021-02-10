@@ -8,8 +8,4 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\DashService.Logger\DashService.Logger.csproj" />
-  </ItemGroup>
-
 </Project>

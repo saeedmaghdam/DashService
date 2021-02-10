@@ -10,15 +10,16 @@
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="5.0.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
     <PackageReference Include="Serilog" Version="2.10.0" />
     <PackageReference Include="Serilog.Extensions.Hosting" Version="3.1.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+    <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DashService.Job.Abstraction\DashService.Job.Abstraction.csproj" />
     <ProjectReference Include="..\DashService.Job\DashService.Job.csproj" />
-    <ProjectReference Include="..\DashService.Logger\DashService.Logger.csproj" />
     <ProjectReference Include="..\DashService.Runtime\DashService.Runtime.csproj" />
     <ProjectReference Include="..\DashService.WebApi\DashService.WebApi.csproj" />
     <ProjectReference Include="..\DashService.Worker\DashService.Worker.csproj" />

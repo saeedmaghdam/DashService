@@ -1,8 +1,8 @@
-﻿using DashService.Logger;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using DashService.Job.Abstraction;
+using Microsoft.Extensions.Logging;
 
 namespace DashService.Job.Sample
 {
@@ -17,6 +17,7 @@ namespace DashService.Job.Sample
         public Job(ILogger logger) : base(logger)
         {
             _logger = logger;
+            _logger.BeginScope(this);
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -26,8 +27,8 @@ namespace DashService.Job.Sample
                 if (cancellationToken.IsCancellationRequested)
                     break;
 
-                //_logger.Information("*************************************");
-                _logger.Information("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+                //_logger.LogInformation(new EventId(0, "Service1"), "*************************************");
+                _logger.LogInformation(new EventId(0, "Service1"), "#####################################");
 
                 Task.Delay(3000, cancellationToken).Wait(cancellationToken);
             }
@@ -38,7 +39,7 @@ namespace DashService.Job.Sample
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.Error("I'm sample job 1! I've finished my task, thank you.");
+            _logger.LogError("I'm sample job 1! I've finished my task, thank you.");
 
             return Task.CompletedTask;
         }

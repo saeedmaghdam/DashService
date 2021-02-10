@@ -3,7 +3,6 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using DashService.Framework;
-using DashService.Framework.Utils;
 using DashService.Logger;
 
 namespace DashService.JobHandler.Models
@@ -89,94 +88,137 @@ namespace DashService.JobHandler.Models
             };
         }
 
-        public async Task<Task> StartAsync(CancellationToken cancellationToken)
+        public async Task<bool> StartAsync(CancellationToken cancellationToken)
         {
-            return Task.Run(() =>
+            if (JobStatus != JobStatus.Running)
             {
-                do
+                if (JobStatus == JobStatus.Stopping)
                 {
-                    try
+                    do
                     {
-                        JobAssembly.Instance.StartAsync(JobLoadCancellationTokenSource.Token).Wait(JobLoadCancellationTokenSource.Token);
-                    }
-                    catch { }
+                        if (JobStatus == JobStatus.Stopped)
+                            break;
 
-                    JobStatus = JobStatus.Stopped;
-
-                    if (UpdatingMode)
-                    {
-                        // Stop job if already working
-                        if (JobStatus == JobStatus.Running || JobStatus == JobStatus.Paused)
-                            JobAssembly.Instance.StopAsync(JobUnloadCancellationTokenSource.Token).Wait(JobUnloadCancellationTokenSource.Token);
-
-                        // Unload current job
-                        JobAssembly.HostAssemblyLoadContext.Unload();
-
-                        // Try to load new assembly
-                        int retryWaitingTimeInMs = 2000;
-                        int retryCounter = 0;
-                        do
+                        try
                         {
-                            try
+                            Task.Delay(100, cancellationToken).Wait(cancellationToken);
+                        }
+                        catch { }
+
+                        if (cancellationToken.IsCancellationRequested)
+                            break;
+                    } while (true);
+                }
+
+                if (cancellationToken.IsCancellationRequested)
+                    return false;
+
+                JobStartingTask = Task.Run(() =>
+                {
+                    do
+                    {
+                        try
+                        {
+                            JobLoadCancellationTokenSource = new CancellationTokenSource();
+                            JobUnloadCancellationTokenSource = new CancellationTokenSource();
+                            JobStatus = JobStatus.Running;
+                            JobAssembly.Instance.StartAsync(JobLoadCancellationTokenSource.Token).Wait(JobLoadCancellationTokenSource.Token);
+                        }
+                        catch { }
+
+                        if (UpdatingMode)
+                        {
+                            // Stop job if already working
+                            if (JobStatus == JobStatus.Running || JobStatus == JobStatus.Paused)
                             {
-                                var jobAssembly = _jobLoader.Load(Path.GetDirectoryName(JobAssembly.JobFullPath));
-
-                                if (jobAssembly != null)
-                                {
-                                    JobAssembly = jobAssembly;
-                                    JobLoadCancellationTokenSource = new CancellationTokenSource();
-                                    JobUnloadCancellationTokenSource = new CancellationTokenSource();
-                                    JobStatus = JobStatus.None;
-
-                                    break;
-                                }
+                                JobAssembly.Instance.StopAsync(JobUnloadCancellationTokenSource.Token).Wait(JobUnloadCancellationTokenSource.Token);
+                                JobStatus = JobStatus.Stopped;
                             }
-                            catch (Exception ex)
+
+                            // Unload current job
+                            JobAssembly.HostAssemblyLoadContext.Unload();
+
+                            // Try to load new assembly
+                            int retryWaitingTimeInMs = 2000;
+                            int retryCounter = 0;
+                            do
                             {
-                                _logger.Error("Couldn't load the job!");
-
-                                if (retryCounter <= 60)
-                                {
-                                    switch (retryCounter)
-                                    {
-                                        case 20:
-                                            retryWaitingTimeInMs = 10000;
-                                            break;
-                                        case 40:
-                                            retryWaitingTimeInMs = 20000;
-                                            break;
-                                        case 60:
-                                            retryWaitingTimeInMs = 60000;
-                                            break;
-                                    }
-
-                                    retryCounter++;
-                                }
-
                                 try
                                 {
-                                    Task.Delay(retryWaitingTimeInMs, cancellationToken).Wait(cancellationToken);
-                                }
-                                catch { }
-                            }
-                        } while (true);
+                                    var jobAssembly = _jobLoader.Load(Path.GetDirectoryName(JobAssembly.JobFullPath));
 
-                        UpdatingMode = false;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                } while (true);
-            });
+                                    if (jobAssembly != null)
+                                    {
+                                        JobAssembly = jobAssembly;
+
+                                        break;
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    _logger.Error("Couldn't load the job!");
+
+                                    if (retryCounter <= 60)
+                                    {
+                                        switch (retryCounter)
+                                        {
+                                            case 20:
+                                                retryWaitingTimeInMs = 10000;
+                                                break;
+                                            case 40:
+                                                retryWaitingTimeInMs = 20000;
+                                                break;
+                                            case 60:
+                                                retryWaitingTimeInMs = 60000;
+                                                break;
+                                        }
+
+                                        retryCounter++;
+                                    }
+
+                                    try
+                                    {
+                                        Task.Delay(retryWaitingTimeInMs, cancellationToken).Wait(cancellationToken);
+                                    }
+                                    catch { }
+                                }
+                            } while (true);
+
+                            UpdatingMode = false;
+                        }
+                        else
+                        {
+                            JobStatus = JobStatus.Stopped;
+                            break;
+                        }
+                    } while (true);
+                });
+
+                return true;
+            }
+
+            return false;
         }
 
-        public async Task<Task> StopAsync(CancellationToken cancellationToken)
+        public async Task<bool> StopAsync(CancellationToken cancellationToken)
         {
-            return Task.Run(() =>
+            if (JobStatus == JobStatus.Running || JobStatus == JobStatus.Paused)
             {
-                JobAssembly.Instance.StopAsync(JobUnloadCancellationTokenSource.Token);
-            }, cancellationToken);
+                JobStoppingTask = Task.Run(() =>
+                {
+                    JobLoadCancellationTokenSource.Cancel();
+                    JobAssembly.Instance.StopAsync(JobUnloadCancellationTokenSource.Token);
+                }, cancellationToken).ContinueWith((task) =>
+                {
+                    JobStatus = JobStatus.Stopped;
+                });
+
+                JobStatus = JobStatus.Stopping;
+
+                return true;
+            }
+
+            return false;
         }
     }
 }

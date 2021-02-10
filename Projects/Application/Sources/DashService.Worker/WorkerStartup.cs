@@ -32,10 +32,7 @@ namespace DashService.Worker
             _logger.Information($"DashService was starting the micro services at: {DateTimeOffset.Now}");
 
             foreach (var jobInstance in _jobContainer.JobInstances.ToList())
-            {
                 jobInstance.JobStartingTask = jobInstance.StartAsync(cancellationToken);
-                jobInstance.JobStatus = JobStatus.Running;
-            }
 
             _logger.Information($"DashService started at: {DateTimeOffset.Now}");
 
@@ -58,13 +55,7 @@ namespace DashService.Worker
             _logger.Information($"DashService was stopping the micro services at: {DateTimeOffset.Now}");
 
             foreach (var jobInstance in _jobContainer.JobInstances.ToList())
-            {
-                if (jobInstance.JobStatus == JobStatus.Running || jobInstance.JobStatus == JobStatus.Paused)
-                {
-                    jobInstance.JobLoadCancellationTokenSource.Cancel();
-                    jobInstance.JobStoppingTask = jobInstance.StopAsync(cancellationToken);
-                }
-            }
+                jobInstance.StopAsync(cancellationToken);
 
             try
             {

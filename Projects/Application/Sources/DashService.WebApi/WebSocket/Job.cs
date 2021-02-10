@@ -16,11 +16,8 @@ namespace DashService.WebApi.WebSocket
 
             var jobInstance = jobContainer.JobInstances.Where(x => x.JobAssembly.UniqueId == jobViewId).SingleOrDefault();
 
-            if (jobInstance.JobStatus != JobStatus.Running)
+            if (jobInstance.StartAsync(Context.Common.CancellationToken).Result)
             {
-                jobInstance.JobLoadCancellationTokenSource = new CancellationTokenSource();
-                jobInstance.JobUnloadCancellationTokenSource = new CancellationTokenSource();
-                jobInstance.JobStartingTask = jobInstance.StartAsync(Context.Common.CancellationToken);
                 Socket.CallClientMethod(@"
 {
     ""command"": ""change_status"",
@@ -30,7 +27,6 @@ namespace DashService.WebApi.WebSocket
     }
 }
 ");
-                jobInstance.JobStatus = JobStatus.Running;
             }
         }
 
@@ -41,10 +37,8 @@ namespace DashService.WebApi.WebSocket
 
             var jobInstance = jobContainer.JobInstances.Where(x => x.JobAssembly.UniqueId == jobViewId).SingleOrDefault();
 
-            if (jobInstance.JobStatus == JobStatus.Running || jobInstance.JobStatus == JobStatus.Paused)
+            if (jobInstance.StopAsync(Context.Common.CancellationToken).Result)
             {
-                jobInstance.JobLoadCancellationTokenSource.Cancel();
-                jobInstance.JobStoppingTask = jobInstance.StopAsync(Context.Common.CancellationToken);
                 Socket.CallClientMethod(@"
 {
     ""command"": ""change_status"",
@@ -54,7 +48,6 @@ namespace DashService.WebApi.WebSocket
     }
 }
 ");
-                jobInstance.JobStatus = JobStatus.Stopped;
             }
         }
     }

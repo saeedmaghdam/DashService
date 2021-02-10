@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Autofac;
 using DashService.Job.Abstraction;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace DashService.Job.Sample
@@ -9,15 +10,17 @@ namespace DashService.Job.Sample
     public class Job : JobBase, IJob
     {
         private readonly ILogger _logger;
+        private readonly ConfigurationRoot _config;
 
         public override string Name => "Sample Job";
         public override string Description => "Test Job";
         public override string Version => "2.2.2";
 
-        public Job(ILogger logger) : base(logger)
+        public Job(ILogger logger, ConfigurationRoot config) : base(logger)
         {
             _logger = logger;
             _logger.BeginScope(this);
+            _config = config;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -28,7 +31,7 @@ namespace DashService.Job.Sample
                     break;
 
                 //_logger.LogInformation(new EventId(0, "Service1"), "*************************************");
-                _logger.LogInformation(new EventId(0, "Service1"), "#####################################");
+                _logger.LogInformation(new EventId(0, "Service1"), $"##################{_config.Get<JobOptions>()?.Done}###################");
 
                 Task.Delay(3000, cancellationToken).Wait(cancellationToken);
             }
@@ -46,7 +49,7 @@ namespace DashService.Job.Sample
 
         public static void Register(ContainerBuilder builder)
         {
-
+            
         }
     }
 }

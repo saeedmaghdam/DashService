@@ -8,6 +8,7 @@ using DashService.Framework;
 using DashService.Framework.Utils;
 using DashService.Job.Abstraction;
 using DashService.JobHandler.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace DashService.JobHandler
 {
@@ -67,6 +68,16 @@ namespace DashService.JobHandler
                 return null;
 
             var containerBuilder = new ContainerBuilder();
+
+            var configurationBuilder = new ConfigurationBuilder()
+                .SetBasePath(jobsPath)
+                .AddJsonFile($"appsettings.json", true, true)
+                .AddEnvironmentVariables();
+            foreach (var appSettingFile in Directory.GetFiles(jobsPath, "appsettings.*.json"))
+                configurationBuilder.AddJsonFile(Path.GetFileName(appSettingFile));
+            var config = configurationBuilder.Build();
+            containerBuilder.RegisterInstance((ConfigurationRoot)config);
+
             MethodInfo methodInfo = jobType.GetMethod("Register");
             if (methodInfo == null)
                 return null;

@@ -15,11 +15,6 @@ namespace DashService.Job.Abstraction
             get;
         }
 
-        string Version
-        {
-            get;
-        }
-
         Task StartAsync(CancellationToken cancellationToken);
 
         Task StopAsync(CancellationToken cancellationToken);

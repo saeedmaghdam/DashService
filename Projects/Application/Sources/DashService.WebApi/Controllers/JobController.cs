@@ -27,7 +27,6 @@ namespace DashService.WebApi.Controllers
                     Name = job.JobAssembly.Instance.Name,
                     Description = job.JobAssembly.Instance.Description,
                     JobStatus = job.JobStatus.ToString(),
-                    Version = job.JobAssembly.Instance.Version,
                     ViewId = job.JobAssembly.UniqueId
                 })))
             );

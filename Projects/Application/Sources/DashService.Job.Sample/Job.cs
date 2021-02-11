@@ -12,11 +12,7 @@ namespace DashService.Job.Sample
         private readonly ILogger _logger;
         private readonly ConfigurationRoot _config;
 
-        public override string Name => "Sample Job";
-        public override string Description => "Test Job";
-        public override string Version => "2.2.2";
-
-        public Job(ILogger logger, ConfigurationRoot config) : base(logger)
+        public Job(ILogger logger, ConfigurationRoot config) : base(logger, config)
         {
             _logger = logger;
             _logger.BeginScope(this);

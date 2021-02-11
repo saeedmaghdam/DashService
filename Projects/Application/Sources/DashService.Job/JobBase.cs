@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace DashService.Job
 {
@@ -9,15 +9,25 @@ namespace DashService.Job
 
         public ILogger Logger => _logger;
 
-        public virtual string Name => throw new NotImplementedException();
+        public virtual string Name
+        {
+            get;
+            set;
+        }
 
-        public virtual string Description => throw new NotImplementedException();
+        public virtual string Description
+        {
+            get;
+            set;
+        }
 
-        public virtual string Version => throw new NotImplementedException();
-
-        public JobBase(ILogger logger)
+        public JobBase(ILogger logger, ConfigurationRoot config)
         {
             _logger = logger;
+
+            var jobOptions = config.Get<JobOptions>();
+            Name = jobOptions.JobHeader?.Name ?? "Name not defined";
+            Description = jobOptions.JobHeader?.Description ?? "Description not defined";
         }
     }
 }

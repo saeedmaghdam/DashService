@@ -47,7 +47,7 @@ namespace DashService.Framework
             set;
         }
 
-        Task<bool> StartAsync(CancellationToken cancellationToken);
+        Task<bool> StartAsync(CancellationToken cancellationToken, bool forceStart = false);
 
         Task<bool> StopAsync(CancellationToken cancellationToken);
     }

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using DashService.Framework;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace DashService.JobHandler.Models
@@ -54,6 +56,12 @@ namespace DashService.JobHandler.Models
             set;
         }
 
+        public IEnumerable<string> Schedules
+        {
+            get;
+            set;
+        }
+
         public JobInstance(IJobAssembly jobAssembly, IJobLoader jobLoader, ILogger logger)
         {
             _jobLoader = jobLoader;
@@ -64,7 +72,18 @@ namespace DashService.JobHandler.Models
             JobUnloadCancellationTokenSource = new CancellationTokenSource();
             JobStatus = JobStatus.None;
 
+            LoadSchedule();
             WatchJob();
+        }
+
+        private void LoadSchedule()
+        {
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Path.GetDirectoryName(JobAssembly.JobFullPath))
+                .AddJsonFile($"schedules.json", true, true)
+                .Build();
+
+            Schedules = config.GetSection("Schedules").Get<IEnumerable<string>>();
         }
 
         private void WatchJob()
@@ -88,7 +107,7 @@ namespace DashService.JobHandler.Models
             };
         }
 
-        public async Task<bool> StartAsync(CancellationToken cancellationToken)
+        public async Task<bool> StartAsync(CancellationToken cancellationToken, bool forceStart = false)
         {
             if (JobStatus != JobStatus.Running)
             {
@@ -119,6 +138,21 @@ namespace DashService.JobHandler.Models
                     {
                         try
                         {
+                            if (!forceStart)
+                            {
+                                var scheduleNextOccurrence = DateTime.MaxValue;
+                                var now = DateTime.Now;
+                                foreach (var cronExpression in Schedules)
+                                {
+                                    var schedule = NCrontab.CrontabSchedule.Parse(cronExpression);
+                                    var nextOccurrence = schedule.GetNextOccurrence(now);
+                                    if (nextOccurrence < scheduleNextOccurrence)
+                                        scheduleNextOccurrence = nextOccurrence;
+                                }
+                                JobStatus = JobStatus.Scheduled;
+                                Task.Delay((int)(scheduleNextOccurrence - now).TotalMilliseconds, cancellationToken).Wait(cancellationToken);
+                            }
+
                             JobLoadCancellationTokenSource = new CancellationTokenSource();
                             JobUnloadCancellationTokenSource = new CancellationTokenSource();
                             JobStatus = JobStatus.Running;
@@ -185,11 +219,6 @@ namespace DashService.JobHandler.Models
                             } while (true);
 
                             UpdatingMode = false;
-                        }
-                        else
-                        {
-                            JobStatus = JobStatus.Stopped;
-                            break;
                         }
                     } while (true);
                 });

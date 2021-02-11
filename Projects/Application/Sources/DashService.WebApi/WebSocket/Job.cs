@@ -16,7 +16,7 @@ namespace DashService.WebApi.WebSocket
 
             var jobInstance = jobContainer.JobInstances.Where(x => x.JobAssembly.UniqueId == jobViewId).SingleOrDefault();
 
-            if (jobInstance.StartAsync(Context.Common.CancellationToken).Result)
+            if (jobInstance.StartAsync(Context.Common.CancellationToken, true).Result)
             {
                 Socket.CallClientMethod(@"
 {

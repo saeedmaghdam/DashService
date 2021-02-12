@@ -223,6 +223,7 @@ namespace DashService.JobHandler.Models
                             } while (true);
 
                             UpdatingMode = false;
+                            JobStatus = JobStatus.Scheduled;
                         }
                     } while (true);
                 });

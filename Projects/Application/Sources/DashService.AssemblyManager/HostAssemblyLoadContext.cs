@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
@@ -24,7 +25,12 @@ namespace DashService.JobHandler
             if (assemblyPath != null)
             {
                 Console.WriteLine($"Loading assembly {assemblyPath} into the HostAssemblyLoadContext");
-                return LoadFromAssemblyPath(assemblyPath);
+                Assembly assembly;
+                using (var stream = File.OpenRead(assemblyPath))
+                {
+                    assembly = LoadFromStream((Stream)stream);
+                }
+                return assembly;
             }
 
             return null;

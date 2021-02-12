@@ -138,6 +138,7 @@ namespace DashService.JobHandler.Models
                     {
                         try
                         {
+#if RELEASE
                             if (!forceStart)
                             {
                                 var scheduleNextOccurrence = DateTime.MaxValue;
@@ -152,7 +153,10 @@ namespace DashService.JobHandler.Models
                                 JobStatus = JobStatus.Scheduled;
                                 Task.Delay((int)(scheduleNextOccurrence - now).TotalMilliseconds, cancellationToken).Wait(cancellationToken);
                             }
-
+#else
+                            if (JobStatus == JobStatus.Stopped || JobStatus == JobStatus.Stopping)
+                                break;
+#endif
                             JobLoadCancellationTokenSource = new CancellationTokenSource();
                             JobUnloadCancellationTokenSource = new CancellationTokenSource();
                             JobStatus = JobStatus.Running;

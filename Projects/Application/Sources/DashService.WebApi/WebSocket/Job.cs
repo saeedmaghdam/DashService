@@ -15,6 +15,7 @@ namespace DashService.WebApi.WebSocket
             var jobContainer = autofacContainer.AutofacContainer.Resolve<IJobContainer>();
 
             var jobInstance = jobContainer.JobInstances.Where(x => x.JobAssembly.UniqueId == jobViewId).SingleOrDefault();
+            jobInstance.JobStatus = JobStatus.Starting;
 
             if (jobInstance.StartAsync(Context.Common.CancellationToken, true).Result)
             {

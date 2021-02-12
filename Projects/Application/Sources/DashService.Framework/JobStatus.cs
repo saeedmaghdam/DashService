@@ -7,6 +7,7 @@
         Running = 2,
         Paused = 3,
         Stopping = 4,
-        Scheduled = 5
+        Scheduled = 5,
+        Starting = 6
     }
 }
